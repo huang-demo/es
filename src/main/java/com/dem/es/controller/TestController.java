@@ -13,4 +13,8 @@ public class TestController {
     public String sayHello(){
         return "hello";
     }
+    public String test(){
+        return "test";
+    }
+
 }

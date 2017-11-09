@@ -1,0 +1,9 @@
+# Created by .ignore support plugin (hsz.mobi)
+/.idea/
+/target/
+/es.iml
+.gitignore
+.idea/
+es.iml
+src/main/resources/
+target/
