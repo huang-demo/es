@@ -1,4 +1,5 @@
-
+启动 elasticsearch-head :npm run start
+idea 启动: mvn spring-boot:run
 ###创建索引 put   
 url:localhost:9200/people
 req:
@@ -41,4 +42,4 @@ req
 "date":"2010-10-10"
 }
 
-idea 启动 mvn spring-boot:run
+

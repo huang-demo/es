@@ -67,4 +67,9 @@ public class PeopleController {
         }
         return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @DeleteMapping("/man/delete/{id}")
+    public ResponseEntity deleteById(@PathVariable String id){
+        return null;
+    }
 }
