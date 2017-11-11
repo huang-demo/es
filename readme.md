@@ -1,5 +1,8 @@
-启动 elasticsearch-head :npm run start
-idea 启动: mvn spring-boot:run
+慕课网课程练习
+
+######启动 elasticsearch-head :npm run start
+######idea springboot启动: mvn spring-boot:run
+##ElasticSearch
 ###创建索引 put   
 url:localhost:9200/people
 req:
