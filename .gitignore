@@ -5,5 +5,4 @@
 .gitignore
 .idea/
 es.iml
-src/main/resources/
 target/
