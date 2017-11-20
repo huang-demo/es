@@ -1,5 +1,21 @@
 慕课网课程练习
-
+##elasticsearch 配置
+###master:
+    cluster.name: DEM
+    node.name: master
+    network.host: 127.0.0.1
+    http.port: 9200
+    http.cors.enabled: true 
+    http.cors.allow-origin: "*"
+    node.master: true
+    node.data: true
+####saler
+    cluster.name: DEM
+    node.name: master
+    network.host: 127.0.0.1
+    http.port: 8200
+    discovery.zen.ping.unicast.hosts: ["127.0.0.1"]
+    
 ######启动 elasticsearch-head :npm run start
 ######idea springboot启动: mvn spring-boot:run
 ##ElasticSearch

@@ -11,7 +11,4 @@ public interface UserInfoRepository extends Repository<UserInfo, Long> {
     List<UserInfo> findByName(String name);
 
 
-    @Query(value = "select * from #{#entityName} u where u.name=?1", nativeQuery = true)
-    List<UserInfo> findByName2(String name);
-
 }

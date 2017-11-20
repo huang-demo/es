@@ -11,4 +11,5 @@ public interface UserInfoService {
     List<UserInfo> findAll();
 
     List<UserInfo> findByName(String name);
+
 }

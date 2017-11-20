@@ -33,4 +33,6 @@ public class UserInfoServiceImpl implements UserInfoService {
     public List<UserInfo> findByName(String name) {
         return userInfoRepository.findByName(name);
     }
+
+
 }
