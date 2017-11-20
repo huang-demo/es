@@ -1,4 +1,4 @@
-package com.dem.es.controller;
+package com.dem.es;
 
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;

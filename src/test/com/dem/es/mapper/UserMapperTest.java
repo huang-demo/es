@@ -1,7 +1,7 @@
 package com.dem.es.mapper;
 
-import com.dem.es.controller.Application;
-import com.dem.es.entity.User;
+import com.dem.es.web.Application;
+import com.dem.es.domain.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

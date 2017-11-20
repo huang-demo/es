@@ -1,4 +1,4 @@
-package com.dem.es.controller;
+package com.dem.es;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
