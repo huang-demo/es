@@ -124,7 +124,19 @@
                     <fork>true</fork>
                 </configuration>
             </plugin>
+          <!--  <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <compilerArgs>
+                        <arg>-verbose</arg>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>-->
         </plugins>
+
         <finalName>es</finalName>
     </build>
 </project>
