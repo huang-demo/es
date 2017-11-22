@@ -3,6 +3,7 @@ package com.dem.es.repository;
 import com.dem.es.domain.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -41,8 +42,8 @@ public interface PersonJpaReponsitory extends JpaRepository<Person, Long> {
 
     List<Person> findByNameLikeAndAddressLike(String name, String address);
 
-    @Query("select p from Person p where p.name like ?1 and p.address like ?2")
-    List<Person> findByNameLikeAndAddressLike2(/*@Param("name")*/ String name, /*@Param("address")*/ String address);
+    @Query("select p from Person p where p.name like :name and p.address like :address")
+    List<Person> findByNameLikeAndAddressLike2(@Param("name") String name, @Param("address") String address);
 
     /**
      * select *  from person where name like ?1 limit 2
