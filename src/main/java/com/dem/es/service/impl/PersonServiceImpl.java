@@ -4,6 +4,9 @@ import com.dem.es.domain.Person;
 import com.dem.es.repository.PersonJpaReponsitory;
 import com.dem.es.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -21,6 +24,24 @@ public class PersonServiceImpl implements PersonService {
     public List<Person> findByName(String name) {
         return personJpaReponsitory.findByName(name);
     }
+
+
+    @Override
+    public List<Person> findByNameLike(String name, boolean sortFalg) {
+        if (StringUtils.hasLength(name)) {
+            name = "%" + name + "%";
+        }
+        Sort sort = new Sort(sortFalg ? Sort.Direction.DESC : Sort.Direction.ASC, "id");
+        return personJpaReponsitory.findByNameLike(name, sort);
+    }
+    @Override
+    public List<Person> findByNameLike(String name, Integer pageNo, Integer pageSize) {
+        if (StringUtils.hasLength(name)) {
+            name = "%" + name + "%";
+        }
+        return personJpaReponsitory.findByNameLike(name, new PageRequest(pageNo,pageSize));
+    }
+
 
     @Override
     public List<Person> findByName2(String name) {
@@ -62,7 +83,7 @@ public class PersonServiceImpl implements PersonService {
             address = "%" + address + "%";
         }
 
-        return personJpaReponsitory.findByNameLikeAndAddressLike2(name,address);
+        return personJpaReponsitory.findByNameLikeAndAddressLike2(name, address);
     }
 
     @Override

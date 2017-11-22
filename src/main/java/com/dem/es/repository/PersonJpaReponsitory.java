@@ -1,6 +1,8 @@
 package com.dem.es.repository;
 
 import com.dem.es.domain.Person;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,11 +18,12 @@ public interface PersonJpaReponsitory extends JpaRepository<Person, Long> {
      */
     List<Person> findByName(String name);
 
+
     /**
      * @param name
      * @return
      */
-    @Query("select p from Person p where p.name = ?1")//hpql
+    @Query("select p from Person p where p.name = ?1")
     List<Person> findByName2(String name);
 
     /**
@@ -32,6 +35,23 @@ public interface PersonJpaReponsitory extends JpaRepository<Person, Long> {
     List<Person> findByNameLike(String name);
 
     /**
+     * 排序
+     * @param name
+     * @param sort
+     * @return
+     */
+    List<Person> findByNameLike(String name, Sort sort);
+
+    /**
+     * 带分页查询
+     *
+     * @param name
+     * @param pageable
+     * @return
+     */
+    List<Person> findByNameLike(String name, Pageable pageable);
+
+    /**
      * select * from person where name=?1 and address=?2
      *
      * @param name
@@ -40,8 +60,18 @@ public interface PersonJpaReponsitory extends JpaRepository<Person, Long> {
      */
     List<Person> findByNameAndAddress(String name, String address);
 
+    /**
+     * @param name
+     * @param address
+     * @return
+     */
     List<Person> findByNameLikeAndAddressLike(String name, String address);
 
+    /**
+     * @param name
+     * @param address
+     * @return
+     */
     @Query("select p from Person p where p.name like :name and p.address like :address")
     List<Person> findByNameLikeAndAddressLike2(@Param("name") String name, @Param("address") String address);
 
@@ -52,4 +82,6 @@ public interface PersonJpaReponsitory extends JpaRepository<Person, Long> {
      * @return
      */
     List<Person> findFirst2ByNameLike(String name);
+
+
 }

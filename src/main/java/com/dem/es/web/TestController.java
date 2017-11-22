@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/test")
 public class TestController {
 
-
     @RequestMapping("/sayHello")
     @ResponseBody
     public String sayHello() {
@@ -17,8 +16,8 @@ public class TestController {
     }
 
     @RequestMapping("/")
-    public String index(ModelMap model){
-        model.addAttribute("name","Hello world");
+    public String index(ModelMap model) {
+        model.addAttribute("name", "Hello world");
         return "index";
     }
 

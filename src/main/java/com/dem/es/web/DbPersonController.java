@@ -4,6 +4,7 @@ import com.dem.es.domain.Person;
 import com.dem.es.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,10 +33,11 @@ public class DbPersonController {
         return personService.findByNameAndAddress(name, address);
     }
 
-    @PostMapping("/queryByName")
-    public List<Person> queryByName(String name) {
-        return personService.findByNameLike(name);
+    @PostMapping("/queryByName/{page}")
+    public List<Person> queryByName(String name, @PathVariable Integer page) {
+        return personService.findByNameLike(name, page, 3);
     }
+
 
     @PostMapping("/queryNameAndAddress")
     public List<Person> queryNameAndAddress(String name, String address) {
