@@ -2,6 +2,10 @@ package com.dem.es.web;
 
 
 import com.dem.es.util.Constant;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.elasticsearch.action.delete.DeleteResponse;
@@ -33,6 +37,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/people")
+@Api(value = "elasticserch 用户数据查询")
 public class PeopleController {
 
     private static Log log = LogFactory.getLog(PeopleController.class);
@@ -45,6 +50,7 @@ public class PeopleController {
      * @param id
      * @return
      */
+    @ApiOperation(value = "根据id获取用户信息", notes = "")
     @GetMapping("/man/{id}")
     public ResponseEntity getById(@PathVariable String id) {
         if (StringUtils.hasLength(id)) {
@@ -65,6 +71,7 @@ public class PeopleController {
      * @param date
      * @return
      */
+    @ApiOperation(value = "新增用户信息,返回新建用户id (uuid)", notes = "", response = String.class)
     @PostMapping("/man/add")
     public ResponseEntity add(String name, String country, Integer age, @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
         try {
@@ -83,6 +90,7 @@ public class PeopleController {
         return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ApiOperation(value = "根据用户id删除,删除返回deleted", notes = "")
     @DeleteMapping("/man/delete/{id}")
     public ResponseEntity deleteById(@PathVariable String id) {
         try {
@@ -94,6 +102,7 @@ public class PeopleController {
         return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ApiOperation(value = "根据用户id更新数据", notes = "")
     @PutMapping("/man/update/{id}")
     public ResponseEntity updateById(@PathVariable String id, String name, String country, @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
 //        UpdateRequest req = new UpdateRequest(Constant.INDEX_PEOPLE,Constant.TYPE_MAN,id);
@@ -119,6 +128,13 @@ public class PeopleController {
         return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ApiOperation(value = "模糊查询", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "name", value = "用户名称", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "country", value = "国家", dataType = "String"),
+            @ApiImplicitParam(name = "minAge", value = "最小年龄", required = false, dataType = "Integer"),
+            @ApiImplicitParam(name = "maxAge", value = "最大年级", required = false, dataType = "Integer")
+    })
     @PostMapping("/man/_query")
     public ResponseEntity query(String name, String country, Integer minAge, Integer maxAge) {
         try {
