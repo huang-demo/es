@@ -1,4 +1,4 @@
-package com.dem.es;
+package com.dem.es.conf;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

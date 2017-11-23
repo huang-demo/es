@@ -74,7 +74,7 @@ public interface PersonJpaReponsitory extends JpaRepository<Person, Long> {
      * @param address
      * @return
      */
-    @Query("select p from Person p where p.name like :name and p.address like :address")
+    @Query("select p from Person p where p.name like :name and p.address like :address")//
     List<Person> findByNameLikeAndAddressLike2(@Param("name") String name, @Param("address") String address);
 
     /**
