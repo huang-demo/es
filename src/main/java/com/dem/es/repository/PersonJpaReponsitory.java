@@ -4,6 +4,7 @@ import com.dem.es.domain.Person;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -36,6 +37,7 @@ public interface PersonJpaReponsitory extends JpaRepository<Person, Long> {
 
     /**
      * 排序
+     *
      * @param name
      * @param sort
      * @return
@@ -83,5 +85,11 @@ public interface PersonJpaReponsitory extends JpaRepository<Person, Long> {
      */
     List<Person> findFirst2ByNameLike(String name);
 
+    @Modifying//update delete 必须贴上此标签
+    @Query("update Person p set p.name = :name,p.address=:address where p.id=:id")
+    int update(@Param("id") Long id, @Param("name") String name, @Param("address") String address);
 
+    @Modifying
+    @Query("delete from Person p where p.name = :name")
+    int deleteByName(@Param("name") String name);
 }

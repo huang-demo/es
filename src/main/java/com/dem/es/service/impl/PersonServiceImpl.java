@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
@@ -19,6 +21,24 @@ public class PersonServiceImpl implements PersonService {
     @Autowired
     private PersonJpaReponsitory personJpaReponsitory;
 
+    @Override
+    @Transactional
+    public Person insert(Person person) {
+        return personJpaReponsitory.save(person);
+    }
+
+    @Override
+    @Transactional
+    public int update(Long id, Person person) {
+        int count = personJpaReponsitory.update(id, person.getName(), person.getAddress());
+        return count;
+    }
+
+    @Override
+    @Transactional//注释在类级别上表示当前类的所有公共方法都添加事务
+    public int deleteByName(String name) {
+        return personJpaReponsitory.deleteByName(name);
+    }
 
     @Override
     public List<Person> findByName(String name) {
@@ -34,12 +54,13 @@ public class PersonServiceImpl implements PersonService {
         Sort sort = new Sort(sortFalg ? Sort.Direction.DESC : Sort.Direction.ASC, "id");
         return personJpaReponsitory.findByNameLike(name, sort);
     }
+
     @Override
     public List<Person> findByNameLike(String name, Integer pageNo, Integer pageSize) {
         if (StringUtils.hasLength(name)) {
             name = "%" + name + "%";
         }
-        return personJpaReponsitory.findByNameLike(name, new PageRequest(pageNo,pageSize));
+        return personJpaReponsitory.findByNameLike(name, new PageRequest(pageNo, pageSize));
     }
 
 
