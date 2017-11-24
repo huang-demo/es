@@ -101,4 +101,8 @@ public interface PersonService {
     int update(Long id, Person person);
 
     int deleteByName(String name);
+
+    Person get(Long id);
+
+    int deleteById(Long id);
 }

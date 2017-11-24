@@ -3,7 +3,12 @@ package com.dem.es.service.impl;
 import com.dem.es.domain.Person;
 import com.dem.es.repository.PersonJpaReponsitory;
 import com.dem.es.service.PersonService;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,12 +28,14 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     @Transactional
+    @CachePut(value = "person",key = "#person.id")//缓存名称为person key为id
     public Person insert(Person person) {
         return personJpaReponsitory.save(person);
     }
 
     @Override
     @Transactional
+    @CachePut(value = "person",key = "#person.id")//缓存名称为person key为id
     public int update(Long id, Person person) {
         int count = personJpaReponsitory.update(id, person.getName(), person.getAddress());
         return count;
@@ -41,6 +48,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    @Cacheable(value = "person",key = "#name")
     public List<Person> findByName(String name) {
         return personJpaReponsitory.findByName(name);
     }
@@ -113,5 +121,19 @@ public class PersonServiceImpl implements PersonService {
             name = "%" + name + "%";
         }
         return personJpaReponsitory.findFirst2ByNameLike(name);
+    }
+
+    @Override
+    @Cacheable(value = "person",key = "#id")
+//    @JsonIgnore()
+    public Person get(Long id) {
+        System.out.println("根据id获取用户数据");
+        return personJpaReponsitory.getOne(id);
+    }
+
+    @Override
+    @CacheEvict(value = "person")//从缓存中删除 默认key为参数
+    public int deleteById(Long id) {
+        return 0;
     }
 }

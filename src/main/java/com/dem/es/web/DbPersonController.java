@@ -29,6 +29,11 @@ public class DbPersonController {
         personService.insert(person);
         return person;
     }
+    @ApiOperation(value = "根据id 获取用户数据")
+    @GetMapping("/{id}")
+    public Person getById(@PathVariable Long id){
+        return personService.get(id);
+    }
 
     @ApiOperation("根据id更新数据")
     @ApiImplicitParams({

@@ -1,5 +1,6 @@
 package com.dem.es.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.ibatis.annotations.Mapper;
 
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "person")
+@JsonIgnoreProperties({ "handler","hibernateLazyInitializer" })//懒加载导致json数据对象传输异常
 public class Person implements Serializable {
     @Id
     @GeneratedValue
