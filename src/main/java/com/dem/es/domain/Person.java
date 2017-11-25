@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "person")
-@JsonIgnoreProperties({ "handler","hibernateLazyInitializer" })//懒加载导致json数据对象传输异常
+//@JsonIgnoreProperties({ "handler","hibernateLazyInitializer" })//懒加载导致json数据对象传输异常
 public class Person implements Serializable {
     @Id
     @GeneratedValue
