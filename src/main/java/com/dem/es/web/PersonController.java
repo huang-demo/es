@@ -15,8 +15,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/person")
-@Api(value = "数据库用户查询")
-public class DbPersonController {
+@Api(description = "Person 控制器")
+public class PersonController {
     @Autowired
     private PersonService personService;
 

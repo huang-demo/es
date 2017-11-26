@@ -37,10 +37,10 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/people")
-@Api(value = "elasticserch 用户数据查询")
-public class PeopleController {
+@Api(value = "elasticserch 用户数据查询",description="elasticserch person/man 控制器")
+public class ESPersonController {
 
-    private static Log log = LogFactory.getLog(PeopleController.class);
+    private static Log log = LogFactory.getLog(ESPersonController.class);
     @Autowired
     private TransportClient client;
 

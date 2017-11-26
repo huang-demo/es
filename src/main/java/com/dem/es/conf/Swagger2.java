@@ -27,7 +27,7 @@ public class Swagger2 {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Spring Boot elasticsearch jpa")
+                .title("SpringBoot 练习")
                 .description("Mr.p")
                 .termsOfServiceUrl("")
                 .version("1.0")

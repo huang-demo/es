@@ -1,6 +1,7 @@
 package com.dem.es.web;
 
 import com.dem.es.service.JedisClient;
+import com.dem.es.exception.MyException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -14,18 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/test")
-@Api(value = "测试使用")
+@Api(description = "测试使用")
 public class TestController {
 
-    @Autowired
-    private JedisClient jedisClient;
 
-    @ApiOperation(value = "打印json sayHello ", notes = "")
-    @RequestMapping("/sayHello")
-    @ResponseBody
-    public String sayHello() {
-        return "hello3211";
-    }
 
     @ApiOperation(value = "跳转首页 jsp")
     @GetMapping("/index")
@@ -33,21 +26,25 @@ public class TestController {
         model.addAttribute("name", "Hello world");
         return "index";
     }
-
-    @ApiOperation(value = "redis新增key-value")
-    @PostMapping("/redis")
+    @ApiOperation(value = "打印json sayHello ", notes = "")
+    @GetMapping("/sayHello")
     @ResponseBody
-    public String redisSet(String key, String value) {
-        jedisClient.set(key, value);
-        return "SUCCESS";
+    public String sayHello() {
+        return "hello3211";
     }
 
-    @ApiOperation(value = "从redis中获取hash")
-    @ApiImplicitParams({@ApiImplicitParam(name = "key", paramType = "String", value = "key值"), @ApiImplicitParam(name = "item", paramType = "String")})
-    @GetMapping("/redis/hget")
+
+    @ApiOperation(value = "测试全局错误页面")
+    @PostMapping("/error")
+    public String test2err() throws Exception {
+        throw new Exception("hhyh");
+    }
+
+    @ApiOperation(value = "测试指定MyException拦截")
+    @GetMapping("/jsonErr")
     @ResponseBody
-    public String hget(String key, String item) {
-        return jedisClient.hget(key, item);
+    public String testJsonErr() throws MyException {
+        throw new MyException("测试返回json出错!");
     }
 
 
