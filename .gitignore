@@ -6,3 +6,4 @@
 .idea/
 es.iml
 target/
+/src/test/
