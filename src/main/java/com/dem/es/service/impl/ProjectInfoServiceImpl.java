@@ -5,6 +5,7 @@ import com.dem.es.repository.ProjectInfoJpaResponsitory;
 import com.dem.es.service.ProjectInfoService;
 import com.dem.es.util.PageBean;
 import com.google.gson.Gson;
+import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -12,6 +13,7 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.text.Text;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -129,8 +131,30 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         }
         return source;
     }
-
+    @Override
     public List<ProjectInfo> getAll() {
         return projectInfoJpaResponsitory.findAll();
+    }
+
+    @Override
+    public int deleteByProjectName(String projectName) {
+        BulkRequestBuilder bulkRequest = transportClient.prepareBulk();
+        SearchResponse response = transportClient.prepareSearch("project").setTypes("projectInfo")
+                .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+                .setQuery(QueryBuilders.termQuery("projectName", projectName))
+                .setFrom(0).setSize(20).setExplain(true).execute().actionGet();
+        for(SearchHit hit : response.getHits()){
+            String id = hit.getId();
+            bulkRequest.add(transportClient.prepareDelete("project", "projectInfo", id).request());
+        }
+        BulkResponse bulkResponse = bulkRequest.get();
+        if (bulkResponse.hasFailures()) {
+            for(BulkItemResponse item : bulkResponse.getItems()){
+                System.out.println(item.getFailureMessage());
+            }
+        }else {
+            System.out.println("delete ok");
+        }
+        return 0;
     }
 }

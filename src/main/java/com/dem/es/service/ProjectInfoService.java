@@ -11,4 +11,6 @@ public interface ProjectInfoService {
     Object query(String kw, int page, int pageSize);
 
     List<ProjectInfo> getAll();
+
+    int deleteByProjectName(String name);
 }

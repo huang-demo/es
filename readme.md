@@ -62,3 +62,47 @@ req
 }
 
 
+#--------------------------------
+
+{
+    "settings": {
+        "number_of_shards": 2,
+        "number_of_replicas": 2
+    },
+    "mappings": {
+        "projectInfo": {
+            "properties": {
+                "projectId": {
+                    "type": "text"
+                },
+                "projectName": {
+                   "type": "text",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
+                },
+                "pid": {
+                    "type": "text"
+                },
+                "createDate": {
+                    "type": "date",
+                    "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
+                },
+                "content": {
+                    "type": "text",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
+                },
+				 "user": {
+                    "type": "text"
+                   
+                }, 
+				"phone": {
+                    "type": "text"
+                  
+                }
+            }
+        }
+    }
+}
+
+

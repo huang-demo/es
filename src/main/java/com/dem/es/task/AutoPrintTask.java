@@ -10,7 +10,7 @@ import java.util.Date;
 @Component
 public class AutoPrintTask {
 
-    @Scheduled(cron = "0 */1 * * * ?")
+//    @Scheduled(cron = "0 */1 * * * ?")
     public void autoPrict() {
         System.out.println("------------");
         long start = System.nanoTime();
