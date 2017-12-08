@@ -8,6 +8,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Configuration()
 public class UserMapperTest {
-
+    public static void main(String[] args) {
+        System.out.println(11);
+    }
 
 }

@@ -6,4 +6,7 @@ public class Constant {
     public static String TYPE_MAN = "man";
     public static String SUCCESS = "SUCCESS";
     public static String ERROR = "ERROR";
+
+    public static void main(String[] args) {
+    }
 }
