@@ -15,6 +15,10 @@
     network.host: 127.0.0.1
     http.port: 8200
     discovery.zen.ping.unicast.hosts: ["127.0.0.1"]
+    node.master: false
+    node.data: true
+    http.cors.enabled: true
+    http.cors.allow-origin: "*"
     
 ######启动 elasticsearch-head :npm run start
 ######idea springboot启动: mvn spring-boot:run

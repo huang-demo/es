@@ -17,12 +17,14 @@ public class MyConfig {
 
     @Bean
     public TransportClient client() throws UnknownHostException {
+
+        Settings settings= Settings.builder()
+                .put("cluster.name","DEM")
+                .put("client.transport.sniff", true).build();
+        TransportClient client = new PreBuiltTransportClient(settings);
         InetSocketTransportAddress master = new InetSocketTransportAddress(InetAddress.getByName("localhost"), 9300);
      /*   InetSocketTransportAddress node_1 = new InetSocketTransportAddress(InetAddress.getByName("localhost"), 8200);
         InetSocketTransportAddress node_2 = new InetSocketTransportAddress(InetAddress.getByName("localhost"), 7200);*/
-
-        Settings settings= Settings.builder().put("cluster.name","DEM").build();
-        TransportClient client = new PreBuiltTransportClient(settings);
         client.addTransportAddress(master);
       /*  client.addTransportAddress(node_1);
         client.addTransportAddress(node_2);*/
