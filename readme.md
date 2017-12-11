@@ -1,4 +1,5 @@
-慕课网课程练习
+https://github.com/medcl/elasticsearch-analysis-ik
+
 ##elasticsearch 配置
 ###master:
     cluster.name: DEM
@@ -51,7 +52,88 @@ req:
         },"women":{}
     }
 }
-
+{
+    "settings": {
+        "number_of_shards": 2,
+        "number_of_replicas": 2
+    },
+    "mappings": {
+        "projectBaseInfo": {
+            "properties": {
+                "projectId": {
+                    "type": "integer"
+                },
+                "pid": {
+                    "type": "integer"
+                },
+                "code": {
+                    "type": "text"
+                },
+                "province": {
+                    "type": "text"
+                },
+                "city": {
+                    "type": "text"
+                },
+                "region": {
+                    "type": "text"
+                },
+                "projectamount": {
+                    "type": "double"
+                },
+                "projectName": {
+                    "type": "text",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
+                },
+                "constructionUnits": {
+                     "type": "text",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
+                },
+                "isDeleted": {
+                    "type": "integer"
+                },
+                "contactWay": {
+                    "type": "text"
+                },
+                "contacts": {
+                    "type": "text",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
+                },
+                "designunit": {
+                   "type": "text",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
+                },
+                "remark": {
+                    "type": "text",
+                    "analyzer": "ik_max_word",
+                    "search_analyzer": "ik_max_word"
+                },
+                "pricingYear": {
+                    "type": "integer"
+                },
+                "proUse": {
+                    "type": "text"
+                },
+                "startWorkDate": {
+                    "type": "date",
+                    "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
+                },
+                "endWorkDate": {
+                    "type": "date",
+                    "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
+                },
+                "createon": {
+                    "type": "date",
+                    "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
+                }
+            }
+        }
+    }
+}
 ###保存数据 post
 指定索引
 http://localhost:9200/people/man/1

@@ -3,6 +3,7 @@ package com.dem.es.service.impl;
 import com.dem.es.domain.ProjectInfo;
 import com.dem.es.repository.ProjectInfoJpaResponsitory;
 import com.dem.es.service.ProjectInfoService;
+import com.dem.es.util.Constant;
 import com.dem.es.util.PageBean;
 import com.google.gson.Gson;
 import org.elasticsearch.action.bulk.BulkItemResponse;
@@ -23,6 +24,10 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.AggregationBuilder;
+import org.elasticsearch.search.aggregations.AggregatorFactories;
+import org.elasticsearch.search.aggregations.bucket.filter.FilterAggregationBuilder;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,16 +59,16 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         BulkRequestBuilder bulkRequest = transportClient.prepareBulk();
         try {
             for (ProjectInfo projectInfo : list) {
-                bulkRequest.add(transportClient.prepareIndex("project", "projectInfo")
+                bulkRequest.add(transportClient.prepareIndex(Constant.ELASTIC_INDEX_PROJECT_TEST, Constant.ELASTIC_TYPES_PROJECTINFO)
                         .setSource(jsonBuilder()
                                 .startObject()
                                 .field("projectId", projectInfo.getProjectId())
-                                .field("projectInfo", projectInfo.getProjectId())
                                 .field("projectName", projectInfo.getProjectName())
                                 .field("content", projectInfo.getContent())
                                 .field("pid", projectInfo.getPid())
                                 .field("phone", projectInfo.getPhone())
                                 .field("user", projectInfo.getUser())
+                                .field("createDate", projectInfo.getCreateDate().getTime())
                                 .field("projectType", projectInfo.getProjectType())
                                 .endObject()
                         )
@@ -90,7 +95,7 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         if (projectInfo == null) {
             return "";
         }
-        IndexRequestBuilder builder = transportClient.prepareIndex("project", "projectInfo");
+        IndexRequestBuilder builder = transportClient.prepareIndex(Constant.ELASTIC_INDEX_PROJECT_TEST, Constant.ELASTIC_TYPES_PROJECTINFO);
         XContentBuilder contentBuilder = XContentFactory.jsonBuilder()
                 .startObject()
                 .field("projectId", projectInfo.getProjectId())
@@ -109,19 +114,18 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     @Override
     public Object query(String kw, int page, int pageSize) {
 
-        SearchRequestBuilder searchRequestBuilder = transportClient.prepareSearch("project");
-        searchRequestBuilder.setTypes("projectInfo");
+        SearchRequestBuilder searchRequestBuilder = transportClient.prepareSearch(Constant.ELASTIC_INDEX_PROJECT_TEST);
+        searchRequestBuilder.setTypes(Constant.ELASTIC_TYPES_PROJECTINFO);
         searchRequestBuilder.setSearchType(SearchType.DFS_QUERY_THEN_FETCH);
         QueryStringQueryBuilder queryBuilder = new QueryStringQueryBuilder(kw);
         queryBuilder.analyzer("ik_smart");
-        queryBuilder.field("projectName").field("content");
+        queryBuilder.field("projectName");
         searchRequestBuilder.setQuery(queryBuilder);
         // 分页应用
         searchRequestBuilder.setFrom((page - 1) * pageSize).setSize(pageSize);
         HighlightBuilder hiBuilder = new HighlightBuilder();
         hiBuilder.preTags("<span style=\"color:'red'\">");
         hiBuilder.postTags("</span>");
-        hiBuilder.field("content");
         hiBuilder.field("projectName");
         searchRequestBuilder.highlighter(hiBuilder);
         // 执行搜索,返回搜索响应信息
@@ -135,6 +139,28 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         resultPage.setTotalNum(hits.totalHits);
         resultPage.setItems(getPageResult(hits));
         return resultPage;
+    }
+
+    @Override
+    public PageBean searchProjectName(String kw) {
+        SearchRequestBuilder search = transportClient.prepareSearch(Constant.ELASTIC_INDEX_PROJECT_TEST);
+        search.setTypes(Constant.ELASTIC_TYPES_PROJECTINFO);
+        QueryStringQueryBuilder query = new QueryStringQueryBuilder(kw);
+        query.analyzer("ik_smart");
+        query.field("projectName").field("content");
+        search.setFetchSource("projectName","");
+//        AggregationBuilder agg =new FilterAggregationBuilder();
+//        search.addAggregation(agg);
+//        search.fields("projectName");
+        search.setQuery(query);
+        SearchResponse response = search.execute().actionGet();
+        PageBean page = new PageBean();
+        List<Object> items = new ArrayList<>();
+        for (SearchHit searchHitFields : response.getHits()) {
+            items.add(searchHitFields.getSource());
+        }
+        page.setItems(items);
+        return page;
     }
 
     private List<Map<String, Object>> getPageResult(SearchHits hits) {
@@ -166,7 +192,8 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     @Override
     public int deleteByProjectName(String projectName) {
         BulkRequestBuilder bulkRequest = transportClient.prepareBulk();
-        SearchResponse response = transportClient.prepareSearch("project").setTypes("projectInfo")
+        SearchResponse response = transportClient.prepareSearch(Constant.ELASTIC_INDEX_PROJECT_TEST)
+                .setTypes(Constant.ELASTIC_TYPES_PROJECTINFO)
                 .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                 .setQuery(termQuery("projectName", projectName))
                 .setFrom(0).setSize(20).setExplain(true).execute().actionGet();
@@ -187,28 +214,35 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
 
     @Override
     public Object queryMutiType(String kw, int page, int pageSize) {
+        PageBean result = new PageBean();
+        QueryStringQueryBuilder queryBuilder = new QueryStringQueryBuilder(kw);
+        queryBuilder.analyzer("ik_smart");
+        queryBuilder.field("projectName").field("content");
+        SearchRequestBuilder srb1 = transportClient.prepareSearch(Constant.ELASTIC_INDEX_PROJECT_TEST)
+                .setTypes(Constant.ELASTIC_TYPES_PROJECTINFO)
+                .setQuery(queryBuilder);
 
-        QueryBuilder qb = boostingQuery(
-                termQuery("projectName", kw),
-                termQuery("content", kw))
-                .negativeBoost(0.2f);
-        SearchRequestBuilder srb1 = transportClient.prepareSearch("project")
-                .setTypes("projectInfo")
-                .setQuery(QueryBuilders.queryStringQuery("elasticsearch")).setSize(1);
         SearchRequestBuilder srb2 = transportClient
                 .prepareSearch("people").setTypes("man")
-                .setQuery(QueryBuilders.matchQuery("name", kw)).setSize(1);
+                .setQuery(QueryBuilders.matchQuery("name", kw));
 
         MultiSearchResponse sr = transportClient.prepareMultiSearch()
                 .add(srb1)
                 .add(srb2)
                 .get();
         long nbHits = 0;
+        List<Object> pageItem = new ArrayList<>();
         for (MultiSearchResponse.Item item : sr.getResponses()) {
             SearchResponse response = item.getResponse();
-            nbHits += response.getHits().getTotalHits();
+            SearchHits hits = response.getHits();
+            nbHits += hits.getTotalHits();
+            for (SearchHit hit : hits.getHits()) {
+                pageItem.add(hit);
+            }
         }
-        return null;
+        result.setTotalNum(nbHits);
+        result.setItems(pageItem);
+        return result;
     }
 
     public Object queryMutiIndex(String kw, int page, int pageSize) {

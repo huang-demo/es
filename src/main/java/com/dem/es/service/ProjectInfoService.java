@@ -1,6 +1,7 @@
 package com.dem.es.service;
 
 import com.dem.es.domain.ProjectInfo;
+import com.dem.es.util.PageBean;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,8 +10,11 @@ public interface ProjectInfoService {
 
     void batchAdd();
 
-    String  addOne(Long id) throws IOException;
+    String addOne(Long id) throws IOException;
+
     Object query(String kw, int page, int pageSize);
+
+    PageBean searchProjectName(String kw);
 
     List<ProjectInfo> getAll();
 
