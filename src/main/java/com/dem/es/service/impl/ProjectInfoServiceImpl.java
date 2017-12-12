@@ -25,6 +25,7 @@ import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.AggregatorFactories;
 import org.elasticsearch.search.aggregations.bucket.filter.FilterAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -148,6 +149,9 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         QueryStringQueryBuilder query = new QueryStringQueryBuilder(kw);
         query.analyzer("ik_smart");
         query.field("projectName").field("content");
+        AggregationBuilder aggregationBuilder = AggregationBuilders.terms("agg")
+                .field("projectName")
+                .subAggregation(AggregationBuilders.topHits("top").explain(true).size(1).from(10));
         search.setFetchSource("projectName","");
 //        AggregationBuilder agg =new FilterAggregationBuilder();
 //        search.addAggregation(agg);

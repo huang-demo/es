@@ -19,8 +19,8 @@ public class ProjectController {
         return projectInfoService.getAll();
     }
 
-    @GetMapping("/autoInseart")
-    public String autoInseart() {
+    @GetMapping("/bachAdd")
+    public String bachAdd() {
         projectInfoService.batchAdd();
         return "Hello";
     }
