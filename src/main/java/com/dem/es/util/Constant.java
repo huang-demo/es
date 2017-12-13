@@ -8,7 +8,9 @@ public class Constant {
     public static String ERROR = "ERROR";
 
     public static final String ELASTIC_INDEX_PROJECT_TEST = "project_test";
+    public static final String ELASTIC_INDEX_PROJECT = "project";
     public static final String ELASTIC_TYPES_PROJECTINFO = "projectInfo";
+    public static final String ELASTIC_TYPES_PROJECTBASEINFO = "projectBaseInfo";
 
     public static void main(String[] args) {
     }
