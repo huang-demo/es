@@ -2,7 +2,7 @@ package com.dem.es.conf;
 
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.transport.TransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.elasticsearch.xpack.client.PreBuiltXPackTransportClient;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,7 +37,7 @@ public class MyConfig {
             client = new PreBuiltTransportClient(settings);
             for (String uri : uris.split(",")) {
                 String[] split = uri.split(":");
-                client.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(split[0]), Integer.valueOf(split[1])));
+                client.addTransportAddress(new TransportAddress(InetAddress.getByName(split[0]), Integer.valueOf(split[1])));
             }
         } else {
             Settings settings = Settings.builder().put("cluster.name", customName)
@@ -48,7 +48,7 @@ public class MyConfig {
             client = new PreBuiltXPackTransportClient(settings);
             for (String uri : uris.split(",")) {
                 String[] split = uri.split(":");
-                client.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(split[0]), Integer.valueOf(split[1])));
+                client.addTransportAddress(new TransportAddress(InetAddress.getByName(split[0]), Integer.valueOf(split[1])));
             }
         }
         return client;

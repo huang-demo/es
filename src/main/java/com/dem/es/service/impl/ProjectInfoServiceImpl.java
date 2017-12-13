@@ -163,7 +163,8 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         PageBean page = new PageBean();
         List<Object> items = new ArrayList<>();
         for (SearchHit searchHitFields : response.getHits()) {
-            items.add(searchHitFields.getSource());
+            items.add(searchHitFields.getSourceAsMap());
+//            items.add(searchHitFields.getSource());
         }
         page.setItems(items);
         return page;
@@ -180,7 +181,8 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     private Map<String, Object> getHightLightObj(SearchHit searchHitFields) {
         StringBuilder builder;
         Text[] fragments;
-        Map<String, Object> source = searchHitFields.getSource();
+//        Map<String, Object> source = searchHitFields.getSource();
+        Map<String, Object> source = searchHitFields.getSourceAsMap();
         Map<String, HighlightField> highlightFields = searchHitFields.getHighlightFields();
         for (String s : highlightFields.keySet()) {
             builder = new StringBuilder(30);

@@ -162,7 +162,8 @@ public class ESPersonController {
             SearchResponse res = searchRequestBuilder.get();
             List<Map<String, Object>> list = new ArrayList<>();
             for (SearchHit hit : res.getHits()) {
-                list.add(hit.getSource());
+//                list.add(hit.getSource());
+                list.add(hit.getSourceAsMap());
             }
             return new ResponseEntity(list, HttpStatus.OK);
         } catch (Exception e) {
