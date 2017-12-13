@@ -1,5 +1,12 @@
 https://github.com/medcl/elasticsearch-analysis-ik
+安装插件
+elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v6.0.0/elasticsearch-analysis-ik-6.0.0.zip
 
+安装x-pack
+bin/elasticsearch-plugin install x-pack
+
+卸载插件
+bin/elasticsearch-plugin remove x-pack
 ##elasticsearch 配置
 ###master:
     cluster.name: DEM

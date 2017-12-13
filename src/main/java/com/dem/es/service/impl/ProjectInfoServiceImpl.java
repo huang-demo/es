@@ -115,8 +115,10 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     @Override
     public Object query(String kw, int page, int pageSize) {
 
-        SearchRequestBuilder searchRequestBuilder = transportClient.prepareSearch(Constant.ELASTIC_INDEX_PROJECT_TEST);
-        searchRequestBuilder.setTypes(Constant.ELASTIC_TYPES_PROJECTINFO);
+        SearchRequestBuilder searchRequestBuilder = transportClient.prepareSearch("project");
+        searchRequestBuilder.setTypes("projectBaseInfo");
+        /*SearchRequestBuilder searchRequestBuilder = transportClient.prepareSearch(Constant.ELASTIC_INDEX_PROJECT_TEST);
+        searchRequestBuilder.setTypes(Constant.ELASTIC_TYPES_PROJECTINFO);*/
         searchRequestBuilder.setSearchType(SearchType.DFS_QUERY_THEN_FETCH);
         QueryStringQueryBuilder queryBuilder = new QueryStringQueryBuilder(kw);
         queryBuilder.analyzer("ik_smart");

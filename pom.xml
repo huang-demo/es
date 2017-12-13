@@ -11,7 +11,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <elasticsearch.version>5.5.2</elasticsearch.version>
+        <elasticsearch.version>5.5.3</elasticsearch.version>
         <log4j-api.version>2.8.2</log4j-api.version>
         <log4j-core.version>2.7</log4j-core.version>
     </properties>
@@ -61,7 +61,7 @@
         <dependency>
             <groupId>org.elasticsearch.client</groupId>
             <artifactId>x-pack-transport</artifactId>
-            <version>5.6.3</version>
+            <version>${elasticsearch.version}</version>
         </dependency>
         <!--ElasticSearch 5.x 根据官网配置maven 依赖, 由于 5.0x的 jar 内部使用的 apache log4日志。-->
         <!--所以要配置额外的依赖支持 org.apache.logging.log4j。-->
@@ -142,14 +142,21 @@
             <artifactId>jedis</artifactId>
             <version>2.7.2</version>
         </dependency>
-   <!--     <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jms</artifactId>
-        </dependency>
+        <!-- https://mvnrepository.com/artifact/bouncycastle/bcprov-jdk14 -->
         <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-client</artifactId>
-        </dependency>-->
+            <groupId>bouncycastle</groupId>
+            <artifactId>bcprov-jdk14</artifactId>
+            <version>136</version>
+        </dependency>
+
+        <!--     <dependency>
+                 <groupId>org.springframework</groupId>
+                 <artifactId>spring-jms</artifactId>
+             </dependency>
+             <dependency>
+                 <groupId>org.apache.activemq</groupId>
+                 <artifactId>activemq-client</artifactId>
+             </dependency>-->
         <!--       &lt;!&ndash;ehcache&ndash;&gt;
                <dependency>
                    <groupId>net.sf.ehcache</groupId>

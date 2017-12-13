@@ -4,6 +4,8 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
+import org.elasticsearch.xpack.client.PreBuiltXPackTransportClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 /**
@@ -15,19 +17,40 @@ import java.net.UnknownHostException;
 @Configuration
 public class MyConfig {
 
+    @Value("${spring.data.elasticsearch.cluster-name}")
+    private String customName;
+    @Value("${spring.elasticsearch.jest.uris}")
+    private String uris;
+    private boolean xpackPlugins = true;
+    @Value("${spring.elasticsearch.jest.username}")
+    private String xpackUser;
+    @Value("${spring.elasticsearch.jest.password}")
+    private String xpackPass;
+
     @Bean
     public TransportClient client() throws UnknownHostException {
+        TransportClient client = null;
+        if (!xpackPlugins) {
+            Settings settings = Settings.builder()
+                    .put("cluster.name", customName)
+                    .put("client.transport.sniff", true).build();
+            client = new PreBuiltTransportClient(settings);
+            for (String uri : uris.split(",")) {
+                String[] split = uri.split(":");
+                client.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(split[0]), Integer.valueOf(split[1])));
+            }
+        } else {
+            Settings settings = Settings.builder().put("cluster.name", customName)
+                    .put("xpack.security.transport.ssl.enabled", false)
+                    .put("xpack.security.user", xpackUser + ":" + xpackPass)
+                    .put("client.transport.sniff", true).build();
 
-        Settings settings= Settings.builder()
-                .put("cluster.name","DEM")
-                .put("client.transport.sniff", true).build();
-        TransportClient client = new PreBuiltTransportClient(settings);
-        InetSocketTransportAddress master = new InetSocketTransportAddress(InetAddress.getByName("localhost"), 9300);
-     /*   InetSocketTransportAddress node_1 = new InetSocketTransportAddress(InetAddress.getByName("localhost"), 8200);
-        InetSocketTransportAddress node_2 = new InetSocketTransportAddress(InetAddress.getByName("localhost"), 7200);*/
-        client.addTransportAddress(master);
-      /*  client.addTransportAddress(node_1);
-        client.addTransportAddress(node_2);*/
+            client = new PreBuiltXPackTransportClient(settings);
+            for (String uri : uris.split(",")) {
+                String[] split = uri.split(":");
+                client.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(split[0]), Integer.valueOf(split[1])));
+            }
+        }
         return client;
     }
 }
