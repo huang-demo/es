@@ -1,48 +1,28 @@
 package com.dem.es.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.apache.ibatis.annotations.Mapper;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "person")
 //@JsonIgnoreProperties({ "handler","hibernateLazyInitializer" })//懒加载导致json数据对象传输异常
+@Setter
+@Getter
 public class Person implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
     private String name;
     private String address;
+    private int age;
+    @Column(name="createtime")
+    private Date createTime;
+    @Column(name="updatetime")
+    private Date updateTime;
 
-    public Person() {
-    }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 }

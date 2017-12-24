@@ -4,13 +4,13 @@ Navicat MySQL Data Transfer
 Source Server         : localhost_3306
 Source Server Version : 50525
 Source Host           : localhost:3306
-Source Database       : test
+Source Database       : elastic
 
 Target Server Type    : MYSQL
 Target Server Version : 50525
 File Encoding         : 65001
 
-Date: 2017-11-22 21:18:34
+Date: 2017-12-24 22:11:15
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -22,18 +22,58 @@ DROP TABLE IF EXISTS `person`;
 CREATE TABLE `person` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `address` varchar(255) DEFAULT NULL,
+  `age` int(11) NOT NULL,
+  `createTime` datetime DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
+  `updateTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of person
 -- ----------------------------
-INSERT INTO `person` VALUES ('1', '广东省广州市', '张三');
-INSERT INTO `person` VALUES ('2', '广东省深圳市', '李四');
-INSERT INTO `person` VALUES ('3', '广东省广州市', '王五');
-INSERT INTO `person` VALUES ('4', '广州', '张琦');
-INSERT INTO `person` VALUES ('5', '广州', '张子琪');
-INSERT INTO `person` VALUES ('6', '广州', '张3');
-INSERT INTO `person` VALUES ('7', '广州', '张兴');
-INSERT INTO `person` VALUES ('8', '广州', '张光');
+INSERT INTO `person` VALUES ('1', '广东广州', '10', '2017-12-01 10:45:45', '张三', '2017-12-06 10:45:48');
+INSERT INTO `person` VALUES ('2', '广东深圳', '11', '2017-12-02 10:46:00', '李四', '2017-12-13 10:46:09');
+INSERT INTO `person` VALUES ('3', '广东广州', '10', '2017-12-14 10:56:05', '张恒', '2017-12-13 10:56:14');
+INSERT INTO `person` VALUES ('4', '广东广州', '10', '2017-12-06 10:57:55', '张勤', '2017-12-07 10:58:04');
+INSERT INTO `person` VALUES ('5', '广东广州', '10', '2017-12-14 10:58:17', '张天翼', '2017-12-05 10:58:28');
+INSERT INTO `person` VALUES ('6', '广州', '10', '2017-12-06 21:51:23', '测试', '2017-12-15 21:51:33');
+
+-- ----------------------------
+-- Table structure for `projectinfo`
+-- ----------------------------
+DROP TABLE IF EXISTS `projectinfo`;
+CREATE TABLE `projectinfo` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `amount` double DEFAULT NULL,
+  `content` varchar(255) DEFAULT NULL,
+  `createTime` datetime DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `pid` bigint(20) DEFAULT NULL,
+  `projectType` int(11) DEFAULT NULL,
+  `updateTime` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of projectinfo
+-- ----------------------------
+INSERT INTO `projectinfo` VALUES ('1', '10000', '测试01', '2017-12-01 11:25:07', '测试01', '0', '1', '2017-12-25 11:25:21');
+INSERT INTO `projectinfo` VALUES ('2', '1000', '测试02', '2017-12-02 11:25:35', '测试02', '1', '2', '2017-12-04 11:25:51');
+INSERT INTO `projectinfo` VALUES ('3', '9000', '测试03', '2017-12-05 12:31:38', '测试03', '1', '2', '2017-12-13 12:31:51');
+INSERT INTO `projectinfo` VALUES ('4', '1000', '测试新增', '2017-12-06 21:50:49', '测试修改', '0', '1', '2017-12-09 21:50:56');
+
+-- ----------------------------
+-- Table structure for `userinfo`
+-- ----------------------------
+DROP TABLE IF EXISTS `userinfo`;
+CREATE TABLE `userinfo` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `address` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of userinfo
+-- ----------------------------

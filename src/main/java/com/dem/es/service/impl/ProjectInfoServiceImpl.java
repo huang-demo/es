@@ -60,13 +60,12 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
                 bulkRequest.add(transportClient.prepareIndex(Constant.ELASTIC_INDEX_PROJECT, Constant.ELASTIC_TYPES_PROJECTBASEINFO)
                         .setSource(jsonBuilder()
                                 .startObject()
-                                .field("projectId", projectInfo.getProjectId())
-                                .field("projectname", projectInfo.getProjectName())
-//                                .field("content", projectInfo.getContent())
+                                .field("id", projectInfo.getId())
+                                .field("name", projectInfo.getName())
+                                .field("content", projectInfo.getContent())
                                 .field("pid", projectInfo.getPid())
-                                .field("phone", projectInfo.getPhone())
-                                .field("user", projectInfo.getUser())
-                                .field("createon", projectInfo.getCreateDate().getTime())
+                                .field("createTime", projectInfo.getCreateTime().getTime())
+                                .field("updateTime", projectInfo.getUpdateTime().getTime())
                                 .field("projectType", projectInfo.getProjectType())
                                 .endObject()
                         )
@@ -103,14 +102,14 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         IndexRequestBuilder builder = transportClient.prepareIndex(Constant.ELASTIC_INDEX_PROJECT_TEST, Constant.ELASTIC_TYPES_PROJECTINFO);
         XContentBuilder contentBuilder = XContentFactory.jsonBuilder()
                 .startObject()
-                .field("projectId", projectInfo.getProjectId())
-                .field("projectname", projectInfo.getProjectName())
-//                .field("content", projectInfo.getContent())
-                .field("phone", projectInfo.getPhone())
+                .field("id", projectInfo.getId())
+                .field("name", projectInfo.getName())
+                .field("amount", projectInfo.getAmount())
                 .field("pid", projectInfo.getPid())
-                .field("user", projectInfo.getUser())
-                .field("createon", projectInfo.getCreateDate().getTime())
+                .field("content", projectInfo.getContent())
+                .field("createTime", projectInfo.getCreateTime().getTime())
                 .field("projectType", projectInfo.getProjectType())
+                .field("updateTime", projectInfo.getUpdateTime())
                 .endObject();
         IndexResponse response = builder.setSource(contentBuilder).get();
         return response.getId();
@@ -120,20 +119,21 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     public Object query(String kw, int page, int pageSize) {
 
         SearchRequestBuilder searchRequestBuilder = transportClient.prepareSearch(Constant.ELASTIC_INDEX_PROJECT);
-        searchRequestBuilder.setTypes(Constant.ELASTIC_TYPES_PROJECTBASEINFO);
+        searchRequestBuilder.setTypes(Constant.ELASTIC_TYPES_PROJECTINFO);
         /*SearchRequestBuilder searchRequestBuilder = transportClient.prepareSearch(Constant.ELASTIC_INDEX_PROJECT_TEST);
         searchRequestBuilder.setTypes(Constant.ELASTIC_TYPES_PROJECTINFO);*/
         searchRequestBuilder.setSearchType(SearchType.DFS_QUERY_THEN_FETCH);
         QueryStringQueryBuilder queryBuilder = new QueryStringQueryBuilder(kw);
-        queryBuilder.analyzer("ik_smart");
-        queryBuilder.field("projectname");
+        queryBuilder.analyzer("ik_max_word");
+        queryBuilder.field("name");
         searchRequestBuilder.setQuery(queryBuilder);
         // 分页应用
         searchRequestBuilder.setFrom((page - 1) * pageSize).setSize(pageSize);
         HighlightBuilder hiBuilder = new HighlightBuilder();
-        hiBuilder.preTags("<span style=\"color:'red'\">");
-        hiBuilder.postTags("</span>");
-        hiBuilder.field("projectname");
+        hiBuilder.preTags("<span style=\"color:'red'\">")
+                .postTags("</span>");
+        hiBuilder.field("name")
+                .field("content");
         searchRequestBuilder.highlighter(hiBuilder);
         // 执行搜索,返回搜索响应信息
         SearchResponse response = searchRequestBuilder.execute()
@@ -153,12 +153,12 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         SearchRequestBuilder search = transportClient.prepareSearch(Constant.ELASTIC_INDEX_PROJECT_TEST);
         search.setTypes(Constant.ELASTIC_TYPES_PROJECTINFO);
         QueryStringQueryBuilder query = new QueryStringQueryBuilder(kw);
-        query.analyzer("ik_smart");
-        query.field("projectname");
+        query.analyzer("ik_max_word");
+        query.field("name");
         AggregationBuilder aggregationBuilder = AggregationBuilders.terms("agg")
-                .field("projectname")
+                .field("name")
                 .subAggregation(AggregationBuilders.topHits("top").explain(true).size(1).from(10));
-        search.setFetchSource("projectname", "");
+        search.setFetchSource("name", "");
 //        AggregationBuilder agg =new FilterAggregationBuilder();
 //        search.addAggregation(agg);
 //        search.fields("projectName");
@@ -207,7 +207,7 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
         SearchResponse response = transportClient.prepareSearch(Constant.ELASTIC_INDEX_PROJECT_TEST)
                 .setTypes(Constant.ELASTIC_TYPES_PROJECTINFO)
                 .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
-                .setQuery(termQuery("projectname", projectName))
+                .setQuery(termQuery("name", projectName))
                 .setFrom(0).setSize(20).setExplain(true).execute().actionGet();
         for (SearchHit hit : response.getHits()) {
             String id = hit.getId();
@@ -228,8 +228,8 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     public Object queryMutiType(String kw, int page, int pageSize) {
         PageBean result = new PageBean();
         QueryStringQueryBuilder queryBuilder = new QueryStringQueryBuilder(kw);
-        queryBuilder.analyzer("ik_smart");
-        queryBuilder.field("projectname").field("content");
+        queryBuilder.analyzer("ik_max_word");
+        queryBuilder.field("name").field("content");
         SearchRequestBuilder srb1 = transportClient.prepareSearch(Constant.ELASTIC_INDEX_PROJECT_TEST)
                 .setTypes(Constant.ELASTIC_TYPES_PROJECTINFO)
                 .setQuery(queryBuilder);
