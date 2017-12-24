@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50525
 File Encoding         : 65001
 
-Date: 2017-12-24 22:11:15
+Date: 2017-12-25 00:58:34
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -53,15 +53,16 @@ CREATE TABLE `projectinfo` (
   `projectType` int(11) DEFAULT NULL,
   `updateTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of projectinfo
 -- ----------------------------
-INSERT INTO `projectinfo` VALUES ('1', '10000', '测试01', '2017-12-01 11:25:07', '测试01', '0', '1', '2017-12-25 11:25:21');
-INSERT INTO `projectinfo` VALUES ('2', '1000', '测试02', '2017-12-02 11:25:35', '测试02', '1', '2', '2017-12-04 11:25:51');
-INSERT INTO `projectinfo` VALUES ('3', '9000', '测试03', '2017-12-05 12:31:38', '测试03', '1', '2', '2017-12-13 12:31:51');
-INSERT INTO `projectinfo` VALUES ('4', '1000', '测试新增', '2017-12-06 21:50:49', '测试修改', '0', '1', '2017-12-09 21:50:56');
+INSERT INTO `projectinfo` VALUES ('1', '10000', '地铁五号线', '2017-12-01 11:25:07', '五号线地铁', '0', '1', '2017-12-13 11:25:21');
+INSERT INTO `projectinfo` VALUES ('2', '1000', '珠江新城', '2017-12-02 11:25:35', '五号线-珠江新城', '1', '2', '2017-12-13 11:25:51');
+INSERT INTO `projectinfo` VALUES ('3', '9000', '猎德站', '2017-12-05 12:31:38', '五号线-猎德站', '1', '2', '2017-12-12 12:31:51');
+INSERT INTO `projectinfo` VALUES ('4', '1000', '车陂南', '2017-12-06 21:50:49', '五号线-车陂南地铁', '0', '1', '2017-12-13 21:50:56');
+INSERT INTO `projectinfo` VALUES ('5', '10000', '测试日期', '2017-12-13 23:51:28', '日期格式', '0', '1', '2017-12-15 23:51:53');
 
 -- ----------------------------
 -- Table structure for `userinfo`

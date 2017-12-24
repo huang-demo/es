@@ -12,7 +12,7 @@ public interface ProjectInfoService {
 
     String addOne(Long id) throws IOException;
 
-    Object query(String kw, int page, int pageSize);
+    PageBean search(String kw, int page, int pageSize);
 
     PageBean searchProjectName(String kw);
 

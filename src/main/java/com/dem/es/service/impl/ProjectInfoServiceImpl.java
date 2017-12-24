@@ -116,7 +116,7 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     }
 
     @Override
-    public Object query(String kw, int page, int pageSize) {
+    public PageBean search(String kw, int page, int pageSize) {
 
         SearchRequestBuilder searchRequestBuilder = transportClient.prepareSearch(Constant.ELASTIC_INDEX_PROJECT);
         searchRequestBuilder.setTypes(Constant.ELASTIC_TYPES_PROJECTINFO);

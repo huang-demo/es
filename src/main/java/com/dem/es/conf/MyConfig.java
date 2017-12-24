@@ -21,7 +21,8 @@ public class MyConfig {
     private String customName;
     @Value("${spring.elasticsearch.jest.uris}")
     private String uris;
-    private boolean xpackPlugins = true;
+    @Value("${isDev}")
+    private boolean isDev;
     @Value("${spring.elasticsearch.jest.username}")
     private String xpackUser;
     @Value("${spring.elasticsearch.jest.password}")
@@ -30,7 +31,7 @@ public class MyConfig {
     @Bean
     public TransportClient client() throws UnknownHostException {
         TransportClient client = null;
-        if (!xpackPlugins) {
+        if (isDev) {
             Settings settings = Settings.builder()
                     .put("cluster.name", customName)
                     .put("client.transport.sniff", true).build();
