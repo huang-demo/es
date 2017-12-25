@@ -197,5 +197,45 @@ req
         }
     }
 }
+获取mapping 
+GET /_mapping/user,projectInfo
+##mget
+GET /_mget
+{
+    "docs": [
+        {
+            "_index": "project_test",
+            "_type": "projectInfo",
+            "_id": 1
+        },
+        {
+            "_index": "user",
+            "_type": "userinfo",
+            "_id": 1
+        }
+    ]
+}
 
-
+##indexA=>indexB
+1.给indexA建立别名
+put /indexA/_alias/aliasA
+2.创建indexB
+...
+3.执行以下
+ POST /_aliases
+{
+    "actions": [
+        {
+            "remove": {
+                "index": "indexA",
+                "alias": "aliasA"
+            }
+        },
+        {
+            "add": {
+                "index": "indexB",
+                "alias": "aliasA"
+            }
+        }
+    ]
+}

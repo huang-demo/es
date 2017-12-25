@@ -27,7 +27,7 @@ public class ProjectController {
 
     @GetMapping("/query/{page}/{pageSize}")
     public Object query(String kw, @PathVariable Integer page, @PathVariable Integer pageSize) {
-        return projectInfoService.query(kw, page, pageSize);
+        return projectInfoService.search(kw, page, pageSize);
     }
 
     @PostMapping("/projectInfo/del")
