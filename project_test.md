@@ -104,5 +104,5 @@ output {
     }
 }
 启动命令
-logstash -f xxx
+logstash -f xxx [--path.data=xxxx]
 
