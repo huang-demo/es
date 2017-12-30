@@ -239,3 +239,28 @@ put /indexA/_alias/aliasA
         }
     ]
 }
+
+查询name=张*翼
+POST /project_test/person/_search
+ {
+   "query":{
+     "match_phrase": {
+       "name":{ 
+         "query": "张,翼",
+         "slop":1
+          
+       }
+     }
+   }
+ }
+
+ POST /project_test/person/_search
+ {
+   "query":{
+     "term": {
+       "name":"张"
+     }
+   },
+   "from": 0,
+   "size": 2
+ }

@@ -133,3 +133,112 @@ POST /project/projectBaseInfo/_search
     },
     "_source": ["projectname","projectamount"]
 }
+
+##match 会对查询进行分析 拆成多个简单关键字 进行合并
+{
+	"query":{
+		"match":{
+			"name":"五号线"
+		}
+	}
+}
+post /project_test/projectInfo/_search
+{
+    "query": {
+        "match": {
+            "name": "五号线 车陂"
+        }
+    }
+}
+###霰弹策略(shotgun approach) operator 默认是or 
+post /project_test/projectInfo/_search
+{
+	"query":{
+		"match":{
+			"name":{
+				"query":"五号线 车陂",
+				"operator":"and"
+			}
+		}
+	}
+}
+##控制 百分比 或者关键字个数
+{
+    "query": {
+        "match": {
+            "name": {
+                "query": "五号线 车陂",
+                "minimum_should_match": "75%"
+            }
+        }
+    }
+}
+
+## 设置关键字权重 boost 关键字 默认为1 原有得分 * x
+{
+    "query": {
+        "bool": {
+            "filter": {
+                "match": {
+                    "name": {
+                        "query": "五号线"
+                    }
+                }
+            },
+            "should": [
+                {
+                    "match": {
+                        "name": {
+                            "query": "珠江新城",
+                            "boost": 3
+                        }
+                    }
+                },
+                {
+                    "match": {
+                        "name": {
+                            "query": "猎德",
+                            "boost": 2
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}
+
+#多字段查询
+{
+	"query":{
+		"multi_match":{
+			"query":"车陂",
+			"fields":["name","content"]
+		}
+	}
+}
+##最佳字段搜索 ：best_fields同样是以字段为中心
+{
+    "query": {
+        "multi_match": {
+            "query": "test abc",
+            "type": "best_fields",
+            "fields": [
+                "name",
+                "content"
+            ]
+        }
+    }
+}
+
+{
+	"query":{
+		"multi_match":{
+			"query":"test abc",
+			"type":"most_fields",
+			"fields":["name","content"]
+		}
+	}
+}
+
+
+
