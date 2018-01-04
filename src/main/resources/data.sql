@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50525
 File Encoding         : 65001
 
-Date: 2017-12-25 00:58:34
+Date: 2018-01-05 00:23:41
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -53,7 +53,7 @@ CREATE TABLE `projectinfo` (
   `projectType` int(11) DEFAULT NULL,
   `updateTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of projectinfo
@@ -61,8 +61,17 @@ CREATE TABLE `projectinfo` (
 INSERT INTO `projectinfo` VALUES ('1', '10000', '地铁五号线', '2017-12-01 11:25:07', '五号线地铁', '0', '1', '2017-12-13 11:25:21');
 INSERT INTO `projectinfo` VALUES ('2', '1000', '珠江新城', '2017-12-02 11:25:35', '五号线-珠江新城', '1', '2', '2017-12-13 11:25:51');
 INSERT INTO `projectinfo` VALUES ('3', '9000', '猎德站', '2017-12-05 12:31:38', '五号线-猎德站', '1', '2', '2017-12-12 12:31:51');
-INSERT INTO `projectinfo` VALUES ('4', '1000', '车陂南', '2017-12-06 21:50:49', '五号线-车陂南地铁', '0', '1', '2017-12-13 21:50:56');
+INSERT INTO `projectinfo` VALUES ('4', '1000', '车陂南站', '2017-12-06 21:50:49', '五号线-车陂南地铁', '0', '1', '2017-12-13 21:50:56');
 INSERT INTO `projectinfo` VALUES ('5', '10000', '测试日期', '2017-12-13 23:51:28', '日期格式', '0', '1', '2017-12-15 23:51:53');
+INSERT INTO `projectinfo` VALUES ('6', '100000', '火车站', '2017-12-06 16:00:08', '五号线-火车东站', '1', '2', '2017-12-13 16:00:49');
+INSERT INTO `projectinfo` VALUES ('7', '100000', '四号线', '2017-12-05 16:01:11', '四号线', '0', '1', '2017-12-06 16:01:36');
+INSERT INTO `projectinfo` VALUES ('8', '10000', '黄村站', '2017-12-06 16:01:53', '四号线-黄村站', '7', '2', '2017-12-13 16:02:12');
+INSERT INTO `projectinfo` VALUES ('9', '10000', '车陂站', '2017-12-06 16:02:27', '四号线-车陂站', '7', '2', '2017-12-05 16:02:43');
+INSERT INTO `projectinfo` VALUES ('10', '10000', '车陂南站', '2017-12-01 16:03:05', '四号线-车陂南站', '7', '2', '2017-12-13 16:03:20');
+INSERT INTO `projectinfo` VALUES ('11', '1000', '', '2017-12-01 16:19:56', 'test adc', '0', '1', '2017-12-06 16:20:04');
+INSERT INTO `projectinfo` VALUES ('12', '10', 'test', '2017-12-06 16:20:35', 'test', '0', '1', '2017-12-07 16:20:43');
+INSERT INTO `projectinfo` VALUES ('13', '1000', 'test', '2018-01-04 23:10:53', 'test', '0', '1', '2018-01-04 23:11:06');
+INSERT INTO `projectinfo` VALUES ('14', '1000', '火车站-1', '2018-01-04 23:11:30', '五号线-火车东站', '0', '1', '2018-01-04 23:11:51');
 
 -- ----------------------------
 -- Table structure for `userinfo`
@@ -72,9 +81,14 @@ CREATE TABLE `userinfo` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `address` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
+  `createtime` datetime DEFAULT NULL,
+  `updatetime` datetime DEFAULT NULL,
+  `sex` tinyint(2) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of userinfo
 -- ----------------------------
+INSERT INTO `userinfo` VALUES ('1', '广州', '张三', '2017-12-01 22:34:21', '2017-12-02 22:34:25', '1');
+INSERT INTO `userinfo` VALUES ('2', '广州', '李四', '2017-12-02 22:34:42', '2017-12-02 22:34:46', '1');
