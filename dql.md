@@ -240,5 +240,138 @@ post /project_test/projectInfo/_search
 	}
 }
 
+### fuzzy 模糊搜索
 
+POST /my_index/my_type/_search
+{
+	"query":{
+		"fuzzy":{
+			"text":"surprize"
+		}
+	}
+}
+##控制错误个数
+POST /my_index/_search
+{
+    "query": {
+        "fuzzy": {
+            "text": {
+                "value": "surprize",
+                "fuzziness": 1
+            }
+        }
+    }
+}
+POST /my_index/_search
+{
+    "query": {
+        "match": {
+            "text": {
+                "query": "SURPRIZE ME!",
+                "fuzziness": "AUTO",
+                "operator": "or"
+            }
+        }
+    }
+}
+POST /project_test/_search
+{
+    "query": {
+        "multi_match": {
+            "fields": [
+                "name",
+                "content"
+            ],
+            "query": "黄村 5号线",
+            "fuzziness": "AUTO"
+        }
+    }
+}
 
+##聚合查询
+POST /cars/transactions/_search
+{
+    "aggs": {
+        "agg_color": {
+            "terms": {
+                "field": "color",
+                "size": 2
+            }
+        }
+    },
+    "size": 0
+}
+
+POST /project_test/_search
+{
+	"query":{
+		"bool":{
+			"must":{
+				"match":{
+					"name":{
+						"query":"火车东站 测试",
+						"boost":2
+					}
+				}
+			}
+		}
+	},
+	"aggs":{
+		"aggs_name":{
+			"terms":{
+				"field":"name",
+				"size":8
+			}
+		}
+	},
+	"size":0
+}
+## avg sum
+POST /project_test/projectInfo/_search
+{
+    "query": {
+        "bool": {
+            "must": {
+                "match_all": {}
+            }
+        }
+    },
+    "aggs": {
+        "aggs_name": {
+            "terms": {
+                "field": "name"
+            },
+            "aggs": {
+                "avg_price": {
+                    "avg": {
+                        "field": "amount"
+                    }
+                }
+            }
+        }
+    },
+    "size":0
+}
+
+{
+    "size": 0,
+    "aggs": {
+        "agg_color": {
+            "terms": {
+                "field": "color"
+            },
+            "aggs": {
+                "agg_avg": {
+                    "avg": {
+                        "field": "price"
+                    }
+                },
+                "make": {
+                    "terms": {
+                        "field": "make"
+                    }
+                }
+            }
+        }
+    }
+}
