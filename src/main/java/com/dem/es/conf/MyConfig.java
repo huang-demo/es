@@ -21,7 +21,7 @@ public class MyConfig {
     private String customName;
     @Value("${spring.elasticsearch.jest.uris}")
     private String uris;
-    @Value("${isDev}")
+    @Value("${elastic.isdev}")
     private boolean isDev;
     @Value("${spring.elasticsearch.jest.username}")
     private String xpackUser;

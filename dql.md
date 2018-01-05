@@ -354,14 +354,52 @@ POST /project_test/projectInfo/_search
 }
 
 {
-    "size": 0,
+    "query": {
+        "bool": {
+            "must": {
+                "match": {
+                    "name": {
+                        "query": "车陂 五号线",
+                        "operator": "or",
+                        "boost": 2
+                    }
+                }
+            }
+        }
+    },
     "aggs": {
-        "agg_color": {
+        "agg_name": {
+            "terms": {
+                "field": "name",
+                "size": 5
+            },
+            "aggs": {
+                "avg_amount": {
+                    "avg": {
+                        "field": "amount"
+                    }
+                },
+                "agg_type": {
+                    "terms": {
+                        "field": "projectType"
+                    }
+                }
+            }
+        }
+    },
+    "size": 0
+}
+
+
+###为每个汽车生成商计算最低和最高的价格
+{
+    "aggs": {
+        "color": {
             "terms": {
                 "field": "color"
             },
             "aggs": {
-                "agg_avg": {
+                "agg_price": {
                     "avg": {
                         "field": "price"
                     }
@@ -369,6 +407,128 @@ POST /project_test/projectInfo/_search
                 "make": {
                     "terms": {
                         "field": "make"
+                    },
+                    "aggs": {
+                        "agg_minprice": {
+                            "min": {
+                                "field": "price"
+                            }
+                        },
+                        "agg_maxPrice": {
+                            "max": {
+                                "field": "price"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "size": 0
+}
+
+### 直方图 histogram  时间跨度interval,条形图统计各区间总和
+{
+    "size": 0,
+    "aggs": {
+        "agg_price": {
+            "histogram": {
+                "field": "price",
+                "interval": 20000
+            },
+            "aggs": {
+                "agg_sumPrice": {
+                    "sum": {
+                        "field": "price"
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+## extended_stats 方差、标准差,平均价... 最受欢迎的10种品牌信息
+{
+    "aggs": {
+        "agg_make": {
+            "terms": {
+                "field": "make",
+                "size": 10
+            },
+            "aggs": {
+                "stat_price": {
+                    "extended_stats": {
+                        "field": "price"
+                    }
+                }
+            }
+        }
+    },
+    "size": 0
+}
+
+## 按月统计销量
+{
+    "size": 0,
+    "aggs": {
+        "sales_month": {
+            "date_histogram": {
+                "field": "sold",
+                "interval": "month",
+                "format": "yyyy-MM-dd"
+            }
+        }
+    }
+}
+####强制没有数据也返回
+{
+    "size": 0,
+    "aggs": {
+        "agg_month": {
+            "date_histogram": {
+                "field": "sold",
+                "interval": "month",
+                "format": "yyyy-MM-dd",
+                "min_doc_count": 0,
+                "extended_bounds": {
+                    "min": "2014-01-01",
+                    "max": "2014-12-31"
+                }
+            }
+        }
+    }
+}
+{
+    "size": 0,
+    "aggs": {
+        "quarter_sales": {
+            "date_histogram": {
+                "field": "sold",
+                "interval": "quarter",
+                "format": "yyyy-MM-dd",
+                "min_doc_count": 0,
+                "extended_bounds": {
+                    "min": "2014-01-1",
+                    "max": "2014-12-31"
+                }
+            },
+            "aggs": {
+                "agg_make": {
+                    "terms": {
+                        "field": "make"
+                    },
+                    "aggs": {
+                        "avg_price": {
+                            "avg": {
+                                "field": "price"
+                            }
+                        },
+                        "sum_price": {
+                            "sum": {
+                                "field": "price"
+                            }
+                        }
                     }
                 }
             }

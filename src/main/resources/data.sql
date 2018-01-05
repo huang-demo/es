@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50525
 File Encoding         : 65001
 
-Date: 2018-01-05 00:23:41
+Date: 2018-01-06 01:22:21
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -72,6 +72,31 @@ INSERT INTO `projectinfo` VALUES ('11', '1000', '', '2017-12-01 16:19:56', 'test
 INSERT INTO `projectinfo` VALUES ('12', '10', 'test', '2017-12-06 16:20:35', 'test', '0', '1', '2017-12-07 16:20:43');
 INSERT INTO `projectinfo` VALUES ('13', '1000', 'test', '2018-01-04 23:10:53', 'test', '0', '1', '2018-01-04 23:11:06');
 INSERT INTO `projectinfo` VALUES ('14', '1000', '火车站-1', '2018-01-04 23:11:30', '五号线-火车东站', '0', '1', '2018-01-04 23:11:51');
+
+-- ----------------------------
+-- Table structure for `transactions`
+-- ----------------------------
+DROP TABLE IF EXISTS `transactions`;
+CREATE TABLE `transactions` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `color` varchar(255) DEFAULT NULL,
+  `make` varchar(255) DEFAULT NULL,
+  `price` double NOT NULL,
+  `sold` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of transactions
+-- ----------------------------
+INSERT INTO `transactions` VALUES ('1', 'red', 'honda', '10000', '2014-10-28 00:00:00');
+INSERT INTO `transactions` VALUES ('2', 'red', 'honda', '20000', '2014-11-05 00:00:00');
+INSERT INTO `transactions` VALUES ('3', 'green', 'ford', '30000', '2014-05-18 00:00:00');
+INSERT INTO `transactions` VALUES ('4', 'blue', 'toyota', '15000', '2014-07-02 00:00:00');
+INSERT INTO `transactions` VALUES ('5', 'green', 'toyota', '12000', '2014-08-19 00:00:00');
+INSERT INTO `transactions` VALUES ('6', 'red', 'honda', '20000', '2014-11-05 00:00:00');
+INSERT INTO `transactions` VALUES ('7', 'red', 'bmw', '80000', '2014-01-01 00:00:00');
+INSERT INTO `transactions` VALUES ('8', 'blue', 'ford', '25000', '2014-02-12 00:00:00');
 
 -- ----------------------------
 -- Table structure for `userinfo`
