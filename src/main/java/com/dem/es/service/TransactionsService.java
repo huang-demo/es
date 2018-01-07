@@ -35,4 +35,38 @@ public interface TransactionsService {
      * @return
      */
     List<Map<String,Object>> getPriceHistogram(double interval);
+
+    /**
+     * 获取个颜色的极值
+     * @param size
+     * @return
+     */
+    List<Map<String,Object>> getMinMaxPriceByColor(int size);
+
+    /**
+     *
+     * @param size
+     * @return
+     */
+    List<Map<String,Object>> getStatasByColors(int size);
+
+    /**
+     * 获取全局平均值于福特产商的平均价
+     * @return
+     */
+    Map<String,Object> getFordAvgAndGlobelAvg();
+
+    /**
+     * $10,000 美元之上的所有汽车同时也为这些车计算平均售价
+     * @param minPrice
+     * @return
+     */
+    Map<String,Object> getGlobalAvg(double minPrice);
+
+    /**
+     * 查询 福特汽车并统计价格在20000以上的平均售价
+     * @param minPrice
+     * @return
+     */
+    Map<String,Object> getFordAndAvg(double minPrice);
 }

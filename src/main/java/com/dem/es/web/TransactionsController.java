@@ -7,9 +7,11 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/transactions")
+@RestController
+@RequestMapping("/transactions")
 @Api("")
 public class TransactionsController {
     @Autowired
@@ -19,6 +21,17 @@ public class TransactionsController {
     @ApiOperation(value = "按颜色统计个数", response = Result.class)
     public Result getCountByColor(@PathVariable Integer size) {
         return Result.success(transactionsService.getCountsByColor(size));
+    }
+
+    @GetMapping("/getColorsMinMax/{size}")
+    public Result getMinMaxPrice(@PathVariable Integer size) {
+//        return Result.success(transactionsService.getMinMaxPriceByColor(size));
+        return Result.success(transactionsService.getStatasByColors(size));
+    }
+
+    @GetMapping("/getFordAvgAndGlobelAvg")
+    public Result getFordAvgAndGlobelAvg() {
+        return Result.success(transactionsService.getFordAvgAndGlobelAvg());
     }
 
     @GetMapping("/getAvg/{size}")
@@ -38,11 +51,20 @@ public class TransactionsController {
     public Result getAmountByMonth() {
         return Result.success(transactionsService.getAmountByMonth());
     }
+
     @GetMapping("/getPriceHistogram")
     @ApiOperation(value = "统计各价格区间总数", response = Result.class)
     public Result getPriceHistogram() {
         return Result.success(transactionsService.getPriceHistogram(20000));
     }
 
+    @GetMapping("/globalAvg")
+    public Result globalAvg(double minPrice) {
+        return Result.success(transactionsService.getGlobalAvg(minPrice));
+    }
+    @GetMapping("/getFordAvg")
+    public Result getFordAvg(double minPrice){
+        return Result.success(transactionsService.getFordAndAvg(minPrice));
+    }
 
 }
