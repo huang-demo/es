@@ -14,6 +14,7 @@ import org.elasticsearch.search.aggregations.bucket.histogram.Histogram;
 import org.elasticsearch.search.aggregations.bucket.histogram.InternalDateHistogram;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.avg.Avg;
+import org.elasticsearch.search.aggregations.metrics.cardinality.Cardinality;
 import org.elasticsearch.search.aggregations.metrics.max.Max;
 import org.elasticsearch.search.aggregations.metrics.min.Min;
 import org.elasticsearch.search.aggregations.metrics.stats.Stats;
@@ -420,6 +421,53 @@ public class TransactionsServiceImpl implements TransactionsService {
         Map<String, Object> resMap = new HashMap<>();
         resMap.put("fordAvgPrice", avg.getValue());
         return resMap;
+    }
+
+    /**
+     *
+     * 创建一个汽车售价的直方图，但是按照红色和绿色（不包括蓝色）车各自的方差来排序
+     * {"size":0,"aggs":{"prices":{"histogram":{"field":"price","interval":20000,"order":{"red_green>redAndGreenStat.variance":"asc"}},"aggs":{"red_green":{"filter":{"terms":{"color":["green","red"]}},"aggs":{"redAndGreenStat":{"extended_stats":{"field":"price"}}}}}}}}
+
+     */
+
+
+  
+
+    /**
+     *
+     {"size":0,"aggs":{"distince_color":{"cardinality":{"field":"make"}}}}
+     */
+    @Override
+    public long getMakeCount() {
+        SearchRequestBuilder req = getTransactionSearchReq(0);
+         req.addAggregation(AggregationBuilders.cardinality("distince_make_count").field("make"));
+        SearchResponse res = req.get();
+        Cardinality distince_make_count = res.getAggregations().get("distince_make_count");
+        return distince_make_count.getValue();
+    }
+
+    /**
+     * {"size":0,"aggs":{"months":{"date_histogram":{"field":"sold","interval":"month","format":"yyyy-MM-dd","min_doc_count":0,"extended_bounds":{"min":"2014-01-1","max":"2014-12-31"}},"aggs":{"colorCount":{"cardinality":{"field":"color"}}}}}}
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> getColorCountHistogram4Month() {
+        SearchRequestBuilder req = getTransactionSearchReq(0);
+        req.addAggregation(AggregationBuilders.dateHistogram("months")
+                .field("sold").format("yyyy-MM-dd").dateHistogramInterval(DateHistogramInterval.MONTH)
+                .minDocCount(0)
+                .subAggregation(AggregationBuilders.cardinality("colorCount").field("color")));
+        SearchResponse res = req.get();
+        InternalDateHistogram  terms = res.getAggregations().get("months");
+        List<Map<String,Object>> resList = new ArrayList<>();
+        for (InternalDateHistogram.Bucket bucket : terms.getBuckets()) {
+            Map<String,Object> cur = new HashMap<>();
+            cur.put("month",bucket.getKeyAsString());
+            Cardinality cardinality = bucket.getAggregations().get("colorCount");
+            cur.put("count",cardinality.getValue());
+            resList.add(cur);
+        }
+        return resList;
     }
 
     private SearchRequestBuilder getTransactionSearchReq(int resSize) {

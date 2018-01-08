@@ -69,4 +69,16 @@ public interface TransactionsService {
      * @return
      */
     Map<String,Object> getFordAndAvg(double minPrice);
+
+    /**
+     * 获取经销商数量
+     * @return
+     */
+    long getMakeCount();
+
+    /**
+     * 每月有多少颜色的车被售出
+     * @return
+     */
+    List<Map<String,Object>> getColorCountHistogram4Month();
 }

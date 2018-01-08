@@ -62,9 +62,22 @@ public class TransactionsController {
     public Result globalAvg(double minPrice) {
         return Result.success(transactionsService.getGlobalAvg(minPrice));
     }
+
     @GetMapping("/getFordAvg")
-    public Result getFordAvg(double minPrice){
+    public Result getFordAvg(double minPrice) {
         return Result.success(transactionsService.getFordAndAvg(minPrice));
+    }
+
+    @GetMapping("/getMakeCount")
+    @ApiOperation(value = "获取经销商数量", response = Result.class)
+    public Result getMakeCount() {
+        return Result.success(transactionsService.getMakeCount());
+    }
+
+    @GetMapping("/getColorCountHistogram4Month")
+    @ApiOperation(value = "统计每月销售的颜色", response = Result.class)
+    public Result getColorCountHistogram4Month(){
+        return Result.success(transactionsService.getColorCountHistogram4Month());
     }
 
 }
