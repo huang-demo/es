@@ -1,0 +1,121 @@
+package com.concom.yunzq.service.elastic;
+
+import com.concom.lang.Page;
+import com.concom.yunzq.req.elastic.ElasticReq;
+import com.concom.yunzq.util.ElasticFieldTypeEnum;
+import com.concom.yunzq.vo.ESSearchIndex;
+import com.concom.yunzq.vo.elastic.SuggestVO;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+public interface ElasticBaseService {
+
+    void init();
+
+    /**
+     * 删除单个索引
+     *
+     * @param indexName
+     * @return
+     */
+    boolean delIndex(String indexName);
+
+    /**
+     * 创建索引
+     *
+     * @param index
+     * @param shardNum   主分片
+     * @param replicaNum 复制分片
+     * @return
+     */
+    boolean createIndex(String index, int shardNum, int replicaNum);
+
+    /**
+     * @param indexName
+     * @return
+     */
+    boolean isExistsIndex(String indexName);
+
+
+
+    /**
+     * @param indexName
+     * @param typeName
+     * @param fields
+     * @param fieldsMap
+     * @return
+     */
+    boolean createMapping(String indexName, String typeName, Map<String, ElasticFieldTypeEnum> fields, Map<String, Map<String, ElasticFieldTypeEnum>> fieldsMap);
+
+    /**
+     * 提供根据提供的json 创建类型
+     *
+     * @param index
+     * @param type
+     * @param json
+     * @return
+     */
+    boolean createMapping(String index, String type, String json);
+
+    /**
+     * @param indexName
+     * @param indexType
+     * @return
+     */
+    boolean isExistsType(String indexName, String indexType);
+
+    /**
+     * 插入数据
+     *
+     * @param index
+     * @param type
+     * @param map
+     * @return
+     */
+    String insert(String index, String type, Map<String, Object> map);
+
+    /**
+     * 根据id删除某条数据
+     *
+     * @param index
+     * @param type
+     * @param id
+     * @return
+     */
+    String delById(String index, String type, String id);
+
+    /**
+     * 查询所有
+     *
+     * @param kw        搜索关键字
+     * @param page      页码
+     * @param pageSize  页面大小
+     * @param textClass a标签样式
+     * @param fields    搜索字段
+     * @return
+     */
+    Page fullSearch(ElasticReq req, String[] indices, String[] fields);
+
+    /**
+     * 批量添加 返回本次新增的最大id
+     *
+     * @param list
+     * @param index
+     * @param type
+     * @return
+     */
+    Integer batchAdd(List<Map<String, Object>> list, String index, String type) throws IOException;
+
+    /**
+     * 获取关键字提示
+     *
+     * @param size
+     * @return
+     */
+    Set<SuggestVO> getSuggestName(List<ESSearchIndex> searchFields, int size);
+
+
+}
