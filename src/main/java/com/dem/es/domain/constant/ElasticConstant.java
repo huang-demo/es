@@ -1,7 +1,6 @@
-package com.dem.es.domain;
+package com.dem.es.domain.constant;
 
 import java.io.Serializable;
-import java.util.*;
 
 public class ElasticConstant implements Serializable {
 
@@ -44,5 +43,8 @@ public class ElasticConstant implements Serializable {
     public static final String SUGGEST_NAME = "agg_suggest";
 
 
+    public static final String ADD="ADD";
+    public static final String UPDATE="UPDATE";
+    public static final String DEL="DEL";
 
 }

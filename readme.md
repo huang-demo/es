@@ -1,32 +1,4 @@
-https://github.com/medcl/elasticsearch-analysis-ik
-安装插件
-elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v6.0.0/elasticsearch-analysis-ik-6.0.0.zip
 
-安装x-pack
-bin/elasticsearch-plugin install x-pack
-
-卸载插件
-bin/elasticsearch-plugin remove x-pack
-##elasticsearch 配置
-###master:
-    cluster.name: DEM
-    node.name: master
-    network.host: 127.0.0.1
-    http.port: 9200
-    http.cors.enabled: true 
-    http.cors.allow-origin: "*"
-    node.master: true
-    node.data: true
-####saler
-    cluster.name: DEM
-    node.name: master
-    network.host: 127.0.0.1
-    http.port: 8200
-    discovery.zen.ping.unicast.hosts: ["127.0.0.1"]
-    node.master: false
-    node.data: true
-    http.cors.enabled: true
-    http.cors.allow-origin: "*"
     
 ######启动 elasticsearch-head :npm run start
 ######idea springboot启动: mvn spring-boot:run

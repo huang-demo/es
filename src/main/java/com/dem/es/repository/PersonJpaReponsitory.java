@@ -92,4 +92,9 @@ public interface PersonJpaReponsitory extends JpaRepository<Person, Long> {
     @Modifying
     @Query("delete from Person p where p.name = :name")
     int deleteByName(@Param("name") String name);
+
+    Person findById(Long id);
+
+    @Query("select p from Person p where p.id >= :start")//
+    List<Person> findListByStartId(@Param("start") Long start);
 }

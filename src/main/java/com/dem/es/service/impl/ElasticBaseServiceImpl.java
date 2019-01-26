@@ -1,11 +1,13 @@
 package com.dem.es.service.impl;
 
-import com.dem.es.domain.ElasticConstant;
+import com.dem.es.domain.constant.ElasticConstant;
 import com.dem.es.domain.ElasticFieldTypeEnum;
+import com.dem.es.domain.constant.RedisConstant;
 import com.dem.es.domain.req.ElasticReq;
 import com.dem.es.domain.vo.ElasticMappingTypeVO;
 import com.dem.es.domain.vo.ElasticNestMappingVO;
 import com.dem.es.service.ElasticBaseService;
+import com.dem.es.service.JedisClient;
 import com.dem.es.util.*;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequestBuilder;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
@@ -19,6 +21,8 @@ import org.elasticsearch.action.admin.indices.mapping.put.PutMappingResponse;
 import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.delete.DeleteRequestBuilder;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
@@ -28,24 +32,32 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
+import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.elasticsearch.search.sort.SortOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
 
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
+@Service
 public class ElasticBaseServiceImpl implements ElasticBaseService {
 
+    private static final Logger logger = LoggerFactory.getLogger(ElasticBaseServiceImpl.class);
 
     @Autowired
     private TransportClient transportClient;
 
+    @Autowired
+    private JedisClient jedisClient;
     @Override
     public void init() {
 
@@ -285,9 +297,9 @@ public class ElasticBaseServiceImpl implements ElasticBaseService {
     }
 
     @Override
-    public Integer batchAdd(List<Map<String, Object>> list, String index, String type) throws IOException {
+    public Long batchAdd(List<Map<String, Object>> list, String index, String type) throws IOException {
         //本次导入的最大id
-        int maxId = 0;
+        Long maxId = 0L;
         if (list.size() == 0) {
             return maxId;
         }
@@ -299,7 +311,7 @@ public class ElasticBaseServiceImpl implements ElasticBaseService {
         List<BulkItemResponse> failItems = new ArrayList<>();
         BulkResponse bulkResponse = null;
         int cur = 0;
-        Integer id = null;
+        Long id = null;
         String idStr = "";
         IndexRequestBuilder requestBuilder = null;
         for (Map<String, Object> objMap : list) {
@@ -307,7 +319,7 @@ public class ElasticBaseServiceImpl implements ElasticBaseService {
             requestBuilder = transportClient.prepareIndex(index, type);
             if (!StringUtil.isEmpty(objMap.get("id"))) {
                 idStr = objMap.get("id").toString();
-                id = Integer.valueOf(idStr);
+                id = Long.valueOf(idStr);
                 maxId = maxId < id ? id : maxId;
                 requestBuilder.setId(idStr);
             }
@@ -329,8 +341,41 @@ public class ElasticBaseServiceImpl implements ElasticBaseService {
         if (bulkResponse.hasFailures()) {
             failItems.addAll(Arrays.asList(bulkResponse.getItems()));
         }
+        list=null;
         maxId += 1;
+        //
+        jedisClient.hset(index, RedisConstant.getELasticCurid(type),maxId.toString());
         return maxId;
+    }
+
+
+    @Override
+    public Integer saveOrUpdate(Map<String, Object> obj, String index, String type) throws IOException {
+        BulkRequestBuilder bulkRequest = this.transportClient.prepareBulk();
+        IndexRequestBuilder prepareIndex = transportClient.prepareIndex(index, type);
+        if (!StringUtil.isEmpty(obj.get("id"))) {
+            prepareIndex.setId(StringUtil.cutNull(obj.get("id")));
+        }
+        prepareIndex.setSource(this.getSourceBuilder(obj));
+        bulkRequest.add(prepareIndex);
+        BulkResponse bulkResponse = bulkRequest.get();
+        int length = bulkResponse.getItems().length;
+        if (bulkResponse.hasFailures()) {
+            BulkItemResponse[] items = bulkResponse.getItems();
+            for (BulkItemResponse item : items) {
+                logger.error("index:{},type:{},Id:{}插入失败", item.getIndex(), item.getType(), item.getId());
+            }
+
+        }
+        return length;
+    }
+
+    @Override
+    public Integer deleteById(String id, String index, String type) throws IOException {
+        DeleteRequestBuilder deleteRequestBuilder = transportClient.prepareDelete(index, type, id);
+        DeleteResponse deleteResponse = deleteRequestBuilder.get();
+        RestStatus status = deleteResponse.status();
+        return RestStatus.OK.equals(status) ? 1 : 0;
     }
 
     /**
@@ -362,6 +407,7 @@ public class ElasticBaseServiceImpl implements ElasticBaseService {
                 continue;
             } else {
                 xContentBuilder.field(key, entry.getValue());
+                continue;
             }
 
         }
@@ -381,6 +427,7 @@ public class ElasticBaseServiceImpl implements ElasticBaseService {
         }
         return key.endsWith("Date")
                 || key.endsWith("date")
+                || key.endsWith("time")
                 || key.endsWith("Time");
     }
 

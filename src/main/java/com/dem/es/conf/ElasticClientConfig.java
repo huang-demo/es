@@ -15,7 +15,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @Configuration
-public class MyConfig {
+public class ElasticClientConfig {
 
     @Value("${spring.data.elasticsearch.cluster-name}")
     private String customName;

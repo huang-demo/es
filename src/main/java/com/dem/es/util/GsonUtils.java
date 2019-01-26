@@ -8,4 +8,7 @@ public class GsonUtils {
         Gson gson = new GsonBuilder().create();
         return gson.toJson(obj);
     }
+    public static Gson getGson(){
+        return new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+    }
 }

@@ -1,43 +1,42 @@
 package com.dem.es.service.impl;
 
 import com.dem.es.domain.Person;
+import com.dem.es.msg.sender.IElasticPersonSender;
 import com.dem.es.repository.PersonJpaReponsitory;
 import com.dem.es.service.PersonService;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class PersonServiceImpl implements PersonService {
     @Autowired
     private PersonJpaReponsitory personJpaReponsitory;
+    @Autowired
+    private IElasticPersonSender elasticPersonSender;
 
     @Override
     @Transactional
-    @CachePut(value = "person",key = "#person.id")//缓存名称为person key为id
+    @CachePut(value = "person", key = "#person.id")//缓存名称为person key为id
     public Person insert(Person person) {
         return personJpaReponsitory.save(person);
     }
 
     @Override
     @Transactional
-    @CachePut(value = "person",key = "#person.id")//缓存名称为person key为id
+    @CachePut(value = "person", key = "#person.id")//缓存名称为person key为id
     public int update(Long id, Person person) {
         int count = personJpaReponsitory.update(id, person.getName(), person.getAddress());
+        //发送更新消息
+        elasticPersonSender.update(id);
         return count;
     }
 
@@ -48,7 +47,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    @Cacheable(value = "person",key = "#name")
+    @Cacheable(value = "person", key = "#name")
     public List<Person> findByName(String name) {
         return personJpaReponsitory.findByName(name);
     }
@@ -124,7 +123,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    @Cacheable(value = "person",key = "#id")
+    @Cacheable(value = "person", key = "#id")
 //    @JsonIgnore()
     public Person get(Long id) {
         System.out.println("根据id获取用户数据");

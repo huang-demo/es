@@ -1,6 +1,6 @@
 package com.dem.es.service.impl;
 
-import com.dem.es.domain.ElasticConstant;
+import com.dem.es.domain.constant.ElasticConstant;
 import com.dem.es.domain.ElasticFieldTypeEnum;
 import com.dem.es.domain.Person;
 import com.dem.es.domain.req.ElasticReq;
@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
+
 @Service
 public class ElasticPersonServiceImpl extends ElasticBaseServiceImpl implements ElasticPersonService {
 
@@ -94,24 +95,26 @@ public class ElasticPersonServiceImpl extends ElasticBaseServiceImpl implements 
 
     @Override
     public void initData(Long start) {
-        List<Person> personList = personJpaReponsitory.findAll();
+        if (start == null || start == 0) {
+            return;
+        }
+        List<Person> personList = personJpaReponsitory.findListByStartId(start);
         List<Map<String, Object>> list = new ArrayList<>();
         for (Person person : personList) {
             list.add(ObjectUtil.obj2Map(person));
         }
-
         try {
-            batchAdd(list, ElasticConstant.INDEX_PERESON,
+            Long nextId = batchAdd(list, ElasticConstant.INDEX_PERESON,
                     ElasticConstant.TYPE_PERSON_PERSONINFO);
 
-            list = null;
-
+            initData(nextId);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
             return;
         }
 
     }
+
     /**
      * 字段下面fields
      */
@@ -171,5 +174,29 @@ public class ElasticPersonServiceImpl extends ElasticBaseServiceImpl implements 
             return QueryBuilders.matchAllQuery();
         }
         return boolQuery;
+    }
+
+    @Override
+    public void update(Long id) throws IOException {
+        Person person = personJpaReponsitory.findById(id);
+        if (person == null) {
+            return;
+        }
+        Map<String, Object> objMap = new HashMap<>();
+        objMap.put("id", person.getId());
+        objMap.put("address", person.getAddress());
+        objMap.put("name", person.getName());
+        objMap.put("age", person.getAge());
+        objMap.put("createTime", person.getCreateTime());
+        objMap.put("updateTime", person.getUpdateTime());
+        super.saveOrUpdate(objMap, ElasticConstant.INDEX_PERESON, ElasticConstant.TYPE_PERSON_PERSONINFO);
+    }
+
+    @Override
+    public void delete(Long id) throws IOException {
+        if (id != null) {
+            super.deleteById(id.toString(), ElasticConstant.INDEX_PERESON, ElasticConstant.TYPE_PERSON_PERSONINFO);
+        }
+
     }
 }

@@ -76,5 +76,25 @@ public interface ElasticBaseService {
      * @param type
      * @return
      */
-    Integer batchAdd(List<Map<String, Object>> list, String index, String type) throws IOException;
+    Long batchAdd(List<Map<String, Object>> list, String index, String type) throws IOException;
+
+    /**
+     *
+     * @param obj
+     * @param index
+     * @param type
+     * @return
+     * @throws IOException
+     */
+    Integer saveOrUpdate(Map<String,Object> obj,String index,String type) throws IOException;
+
+    /**
+     *
+     * @param id
+     * @param index
+     * @param type
+     * @return
+     * @throws IOException
+     */
+    Integer deleteById(String id,String index,String type)throws IOException;
 }
