@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Title</title>
+    <link href="/js/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/js/plugins/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet"/>
+    <link href="/js/plugins.page/pageination.css" rel="stylesheet"/>
+
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="page-header">
+                <h1>
+                    页标题范例
+                    <small>此处编写页标题</small>
+                </h1>
+            </div>
+            <form class="form-search">
+                <input class="input-medium search-query" name="kw" type="text"/>
+                <button type="submit" class="btn search">查找</button>
+            </form>
+            <table class="table" id="personTable">
+                <thead>
+                <tr>
+                    <th>全选</th>
+                    <th>姓名</th>
+                    <th>年龄</th>
+                    <th>地址</th>
+                    <th>更新时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(person, index) in personList">
+                    <td><input type="checkbox" /></td>
+                    <td>{{person.name}}</td>
+                    <td>{{person.age}}</td>
+                    <td>{{person.address}}</td>
+                    <td>{{person.updateTime}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="page">
+    <pageination :total="model.total" :size="model.size" :page="model.page" :changge="pageFn"></pageination>
+</div>
+</body>
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script src="/js/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="/js/plugins.page/pageination.js"></script>
+<script>
+    $(function () {
+        var personTable = new Vue({
+            el: '#personTable',
+            data: {
+                personList: []
+            },
+            methods: {}
+        });
+        var pager = new Vue({
+            el: '#page',
+            data: {
+                model: {
+                    'total': 0,//总页数
+                    'size': 3,//每页显示条目个数不传默认10
+                    'page': 1,//当前页码
+                }
+            },
+            methods: {
+                //页码切换执行方法
+                pageFn(val) {
+                    this.model.page = val;
+                    var param = {'page': val, "pageSize": 3};
+                    getList(param);
+                }
+            }
+        });
+
+        function getList(param) {
+            if (!param) {
+                param={};
+                param['page'] = 1;
+                param['pageSize'] = 3;
+            }
+            $.post("/elasticPerson/searchBykw", param, function (res) {
+                if (res.code == 200) {
+                    var data = res.data;
+                    personTable.personList = data.items;
+                    pager.model = {'total': data.totalNum, 'size': data.pageSize, 'page': data.currentPage}
+                }
+            });
+        };
+        $(".search").unbind("click").on("click",function(){
+            var param={};
+            param['page']=1;
+            param['pageSize']=3;
+            param['kw']=$("input[name='kw']").val();
+            getList(param);
+        });
+        getList({'page': 1, "pageSize": 3});
+    })
+</script>
+</html>

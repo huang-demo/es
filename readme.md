@@ -8,12 +8,12 @@
 ## 技术实现:
 1. 实现mysql数据到es的同步存储,
 ```aidl
-监听器同步entity结构-> elastic
-定时器->增量同步,
+监听器同步entity结构-> elastic mappings
+定时器->数据增量同步,
 mq ->单个更新删除操作
 ```
 
-2. swagger 接口api 文档
+2. swagger 接口api 文档  /swagger-ui.html
 3. es高级查询聚合函数实现
 4. jpa 
 
