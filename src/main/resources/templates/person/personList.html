@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Title</title>
+    <title>Elastic Person搜索</title>
     <link href="/js/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="/js/plugins/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet"/>
     <link href="/js/plugins.page/pageination.css" rel="stylesheet"/>
@@ -17,8 +17,8 @@
         <div class="span12">
             <div class="page-header">
                 <h1>
-                    页标题范例
-                    <small>此处编写页标题</small>
+                    Elastic
+                    <small>Person</small>
                 </h1>
             </div>
             <form class="form-search">
@@ -37,7 +37,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="(person, index) in personList">
-                    <td><input type="checkbox" /></td>
+                    <td><input type="checkbox" v-on:click="checkOn(person.id)" :value="person.id" /></td>
                     <td>{{person.name}}</td>
                     <td>{{person.age}}</td>
                     <td>{{person.address}}</td>
@@ -63,7 +63,11 @@
             data: {
                 personList: []
             },
-            methods: {}
+            methods: {
+                checkOn:function(val){
+                  console.log(val)
+                }
+            }
         });
         var pager = new Vue({
             el: '#page',
