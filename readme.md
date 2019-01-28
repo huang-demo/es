@@ -15,7 +15,8 @@ mq ->单个更新删除操作
 
 2. swagger 接口api 文档  /swagger-ui.html
 3. es高级查询聚合函数实现
-4. jpa 
+4. ORM-jpa 
+5. vue
 
 
 
