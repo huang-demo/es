@@ -165,7 +165,10 @@ public class ElasticPersonServiceImpl extends ElasticBaseServiceImpl implements 
         if (StringUtil.hasLength(req.getKw())) {
             flag = false;
             QueryStringQueryBuilder queryStrBuild = QueryBuilders.queryStringQuery(req.getKw())
-                    .analyzer(ElasticConstant.ANALYZER_IK_SMART).field("name");
+                    .analyzer(ElasticConstant.ANALYZER_IK_SMART)
+                    .field("name")
+                    .field("name.keyword")
+                    .field("name.pinyin");
 
             boolQuery.should(queryStrBuild);
         }
