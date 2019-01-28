@@ -29,7 +29,7 @@ public class UserInfoController {
         return Result.success(list);
     }
 
-    @ApiOperation(value = "/按名称查询", notes = "")
+    @ApiOperation(value = "/按用户id查询", notes = "")
     @GetMapping("/{id}")
     public Result<UserInfo> getById(@PathVariable Long id) {
         return Result.success(userInfoService.findById(id));

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/transactions")
-@Api("")
+@Api(value = "TransactionsController",basePath="/transactions")
 public class TransactionsController {
     @Autowired
     private TransactionsService transactionsService;

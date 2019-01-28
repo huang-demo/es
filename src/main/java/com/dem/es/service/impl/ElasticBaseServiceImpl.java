@@ -141,21 +141,24 @@ public class ElasticBaseServiceImpl implements ElasticBaseService {
         mapping.startObject(fieldName);
         switch (fieldType) {
             case BOOLEAN:
-                mapping.field("type", "boolean");
+                mapping.field("type", "boolean")
+                        .field("index",Boolean.FALSE);
                 break;
             case SHORT:
                 mapping.field("type", "short")
-                        .field("index", ElasticConstant.ANALYZER_NOT_ANALYZED);
+                        .field("index",Boolean.FALSE);
                 break;
             case INTEGER:
                 mapping.field("type", "integer")
-                        .field("index", ElasticConstant.ANALYZER_NOT_ANALYZED);
+                        .field("index",Boolean.FALSE);
                 break;
             case DOUBLE:
-                mapping.field("type", "double");
+                mapping.field("type", "double")
+                        .field("index",Boolean.FALSE);
                 break;
             case LONG:
-                mapping.field("type", "long");
+                mapping.field("type", "long")
+                        .field("index",Boolean.FALSE);
                 break;
             case KEYWORD:
                 mapping.field("type", "keyword");
@@ -165,7 +168,7 @@ public class ElasticBaseServiceImpl implements ElasticBaseService {
                 mapping.field("type", "text")
                         .field("fielddata", true)
                         .field("index", ElasticConstant.ANALYZER_NOT_ANALYZED);
-                addFields(fields, mapping);
+//                addFields(fields, mapping);
                 break;
             case TEXT_IK_SMART:
                 mapping.field("type", "text")
@@ -192,7 +195,7 @@ public class ElasticBaseServiceImpl implements ElasticBaseService {
                 break;
             case DATE:
                 mapping.field("type", "date")
-                        .field("index", ElasticConstant.ANALYZER_NOT_ANALYZED)
+                        .field("index",Boolean.FALSE)
                         .field("format", "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd'T'HH:mm:ss.SSSZ||yyyy-MM-dd||epoch_millis");
                 break;
             case NESTED:
@@ -209,7 +212,7 @@ public class ElasticBaseServiceImpl implements ElasticBaseService {
                 break;
             default:
                 mapping.field("type", "text")
-                        .field("index", ElasticConstant.ANALYZER_NOT_ANALYZED);
+                        .field("index",Boolean.FALSE);
                 addFields(fields, mapping);
                 break;
         }

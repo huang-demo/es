@@ -22,19 +22,6 @@ public class ElasticPersonController {
     @Autowired
     private ElasticPersonService elasticPersonService;
 
-    @PutMapping("/initData")
-    @ApiOperation("初始化导入数据")
-    @ApiImplicitParams({
-            @ApiImplicitParam(value = "起始id", name = "start", dataType = "long", required = true)
-    })
-    public Result initData(Long start) {
-        try {
-            elasticPersonService.initData(start);
-            return Result.success("");
-        } catch (Exception e) {
-        }
-        return Result.error("");
-    }
 
     @PostMapping("/searchBykw")
     @ApiOperation("按名称搜索")
