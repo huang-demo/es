@@ -18,6 +18,17 @@ mq ->单个更新删除操作
 4. ORM-jpa 
 5. vue
 
+Elastic搜索:
+Mysql表结构同步Elastic映射-监听器实现
+Mysql 数据增量同步-定时器
+数据同步更新删除-消息队列
+接口文档:
+Swagger2.0
+前端页面:
+VUE+Bootstrap
+
+
+
 
 
     
