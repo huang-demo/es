@@ -56,3 +56,28 @@ localhost:5601
 GET _cat/indices
 
 lostash
+
+
+## 常见错误
+- JVM虚拟机内存不足
+
+错误：“JavaHotSpot(TM) 64-Bit Server VM warning: INFO: error='Cannotallocate memory' (errno=12)”表示内存不足，
+其配置文件为config目录下的jvm.options,默认为2g，可以修改为1g。
+
+ - max_map_count过小
+错误“max virtual memory areas vm.max_map_count [65530]is too low, increase to at least [262144]”，max_map_count文件包含限制一个进程可以拥有的VMA(虚拟内存区域)的数量，系统默认是65530，修改成262144。
+解决方法是修改/etc/sysctl.conf配置文件，
+```jshelllanguage
+vm.max_map_count=262144
+```
+记得需要重启机器才起作用，修改后配置如下图所示：
+
+ - max file descriptors过小
+ 错误“max file descriptors [65535] for elasticsearchprocess is too low, increase to at least [65536]”，maxfile descriptors为最大文件描述符，设置其大于65536即可。
+ 解决方法是修改/etc/security/limits.conf文件，
+ 添加
+ ```
+* - nofile 65536 
+* - memlock unlimited
+ ```
+ ，“*”表示给所有用户起作用，修改后的配置如下图所示：
