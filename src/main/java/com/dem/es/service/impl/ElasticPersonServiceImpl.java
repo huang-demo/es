@@ -99,7 +99,7 @@ public class ElasticPersonServiceImpl extends ElasticBaseServiceImpl implements 
             return;
         }
         List<Person> personList = personJpaReponsitory.findListByStartId(start);
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Map<String, Object>> list = new ArrayList<>(personList.size());
         for (Person person : personList) {
             list.add(ObjectUtil.obj2Map(person));
         }
@@ -121,7 +121,7 @@ public class ElasticPersonServiceImpl extends ElasticBaseServiceImpl implements 
     @Override
     protected Map<String, Map<String, ElasticFieldTypeEnum>> getFieldsMap() {
         Map<String, Map<String, ElasticFieldTypeEnum>> fieldsMap = new HashMap<>();
-        Map<String, ElasticFieldTypeEnum> nameFields = new HashMap<>();
+        Map<String, ElasticFieldTypeEnum> nameFields = new HashMap<>(2);
         nameFields.put("pinyin", ElasticFieldTypeEnum.TEXT_PINYIN);
         nameFields.put("keyword", ElasticFieldTypeEnum.KEYWORD);
         fieldsMap.put("name", nameFields);
@@ -134,6 +134,7 @@ public class ElasticPersonServiceImpl extends ElasticBaseServiceImpl implements 
         PageBean page = new PageBean();
         SearchRequestBuilder request = getSearchRequest(req.getPage(), req.getPageSize());
         request.setQuery(getQuery(req));
+        addFieldsHighLight(request, "name");
         SearchResponse response = request.get();
         SearchHits responseHits = response.getHits();
         page.setTotalNum(responseHits.totalHits);
@@ -143,6 +144,7 @@ public class ElasticPersonServiceImpl extends ElasticBaseServiceImpl implements 
         Map<String, Object> cur = null;
         for (SearchHit hit : responseHits.getHits()) {
             cur = hit.getSourceAsMap();
+            getHightLightObj(hit,false);
             item.add(cur);
         }
         page.setItems(item);
@@ -190,8 +192,8 @@ public class ElasticPersonServiceImpl extends ElasticBaseServiceImpl implements 
         objMap.put("address", person.getAddress());
         objMap.put("name", person.getName());
         objMap.put("age", person.getAge());
-        objMap.put("createTime", person.getCreateTime());
-        objMap.put("updateTime", person.getUpdateTime());
+        objMap.put("createTime", DateUtil.formatDateToString(person.getCreateTime(),"yyyy-MM-dd"));
+        objMap.put("updateTime",DateUtil.formatDateToString(person.getUpdateTime(),"yyyy-MM-dd"));
         super.saveOrUpdate(objMap, ElasticConstant.INDEX_PERESON, ElasticConstant.TYPE_PERSON_PERSONINFO);
     }
 

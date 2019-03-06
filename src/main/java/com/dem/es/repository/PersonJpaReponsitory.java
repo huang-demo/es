@@ -1,6 +1,7 @@
 package com.dem.es.repository;
 
 import com.dem.es.domain.Person;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -74,7 +75,8 @@ public interface PersonJpaReponsitory extends JpaRepository<Person, Long> {
      * @param address
      * @return
      */
-    @Query("select p from Person p where p.name like :name and p.address like :address")//
+    @Query("select p from Person p where p.name like :name and p.address like :address")
+//
     List<Person> findByNameLikeAndAddressLike2(@Param("name") String name, @Param("address") String address);
 
     /**
@@ -95,6 +97,10 @@ public interface PersonJpaReponsitory extends JpaRepository<Person, Long> {
 
     Person findById(Long id);
 
-    @Query("select p from Person p where p.id >= :start")//
+    @Query("select p from Person p where p.id >= :start")
+//
     List<Person> findListByStartId(@Param("start") Long start);
+
+    Long countByNameLike(@Param("name") String name);
+
 }

@@ -219,4 +219,8 @@ public class DateUtil {
         return c.getTime();
     }
 
+    public static void main(String[] args) {
+        System.out.println(formatDateToString(new Date(),"yyyy-MM-dd HH:mm:ss"));
+    }
+
 }

@@ -1,14 +1,19 @@
 package com.dem.es.service.impl;
 
 import com.dem.es.domain.Person;
+import com.dem.es.domain.req.ElasticReq;
 import com.dem.es.msg.sender.IElasticPersonSender;
 import com.dem.es.repository.PersonJpaReponsitory;
 import com.dem.es.service.PersonService;
+import com.dem.es.util.PageBean;
+import com.dem.es.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -134,5 +139,25 @@ public class PersonServiceImpl implements PersonService {
     @CacheEvict(value = "person")//从缓存中删除 默认key为参数
     public int deleteById(Long id) {
         return 0;
+    }
+
+    @Override
+    public PageBean queryPage(ElasticReq req) {
+        PageBean page = new PageBean();
+        Pageable p = new PageRequest(req.getPage()-1, req.getPageSize());
+        if (StringUtil.hasLength(req.getKw())) {
+            String kw = "%" + req.getKw() + "%";
+            Long count = personJpaReponsitory.countByNameLike(kw);
+            page.setTotalNum(count);
+            if (count == 0) {
+                return page;
+            }
+            page.setItems(personJpaReponsitory.findByNameLike(kw, p));
+        } else {
+            Page<Person> all = personJpaReponsitory.findAll(p);
+            page.setTotalNum(all.getTotalElements());
+            page.setItems(all.getContent());
+        }
+        return page;
     }
 }

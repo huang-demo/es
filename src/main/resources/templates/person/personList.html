@@ -9,6 +9,12 @@
     <link href="/js/plugins/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet"/>
     <link href="/js/plugins.page/pageination.css" rel="stylesheet"/>
 
+    <style>
+        .red-text{
+            color:red;
+            font-weight:bold;
+        }
+    </style>
 </head>
 
 <body>
@@ -16,12 +22,10 @@
     <div class="row-fluid">
         <ul class="nav nav-tabs">
             <li role="presentation" ><a href="/swagger-ui.html">API</a></li>
-            <li role="presentation"><a href="#">Mysql Person</a></li>
-            <li role="presentation" class="active"><a >Elastic Person</a></li>
+            <li data-url="/person/queryPage" role="presentation" class="searchLi"><a>Mysql Person</a></li>
+            <li data-url="/elasticPerson/searchBykw" role="presentation" class="searchLi active"><a >Elastic Person</a></li>
         </ul>
     </div>
-
-
 </div>
 <div class="container-fluid">
     <div class="row-fluid">
@@ -61,7 +65,7 @@
                 <tr v-for="(person, index) in personList">
                     <td><input type="checkbox" v-model='checkboxModel' v-on:click="checkOn(person.id)"
                                :value="person.id"/></td>
-                    <td>{{person.name}}</td>
+                    <td v-html="person.name"></td>
                     <td>{{person.age}}</td>
                     <td>{{person.address}}</td>
                     <td>{{person.updateTime}}</td>
@@ -122,7 +126,7 @@
             data: {
                 model: {
                     'total': 0,//总页数
-                    'size': 3,//每页显示条目个数不传默认10
+                    'size': 10,//每页显示条目个数不传默认10
                     'page': 1,//当前页码
                 }
             },
@@ -140,7 +144,7 @@
         function getParam() {
             var param = {};
             param['page'] = 1;
-            param['pageSize'] = 3;
+            param['pageSize'] = 10;
             param['kw'] = $("input[name='kw']").val();
             return param;
         };
@@ -160,11 +164,11 @@
         $(".search").on("click", function () {
             var param = {};
             param['page'] = 1;
-            param['pageSize'] = 3;
+            param['pageSize'] = 10;
             param['kw'] = $("input[name='kw']").val();
             getList(param);
         });
-        getList({'page': 1, "pageSize": 3});
+        getList({'page': 1, "pageSize": 10});
     })
 </script>
 </html>

@@ -406,7 +406,7 @@ public class ElasticBaseServiceImpl implements ElasticBaseService {
             //日期类型单独处理
             if (isDateField(key)) {
                 Date curDate = (Date) entry.getValue();
-                xContentBuilder.field(entry.getKey(), DateUtil.formatDateToString(curDate, "yyyy-MM-dd"));
+                xContentBuilder.field(entry.getKey(), DateUtil.formatDateToString(curDate,"yyyy-MM-dd HH:mm:ss"));
                 continue;
             } else {
                 xContentBuilder.field(key, entry.getValue());

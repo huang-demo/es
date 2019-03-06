@@ -1,6 +1,8 @@
 package com.dem.es.service;
 
 import com.dem.es.domain.Person;
+import com.dem.es.domain.req.ElasticReq;
+import com.dem.es.util.PageBean;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
@@ -105,4 +107,6 @@ public interface PersonService {
     Person get(Long id);
 
     int deleteById(Long id);
+
+    PageBean queryPage(ElasticReq req);
 }

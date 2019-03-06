@@ -1,7 +1,9 @@
 package com.dem.es.web;
 
 import com.dem.es.domain.Person;
+import com.dem.es.domain.req.ElasticReq;
 import com.dem.es.service.PersonService;
+import com.dem.es.util.PageBean;
 import com.dem.es.util.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -99,5 +101,16 @@ public class PersonController {
     @PostMapping("/queryByNameLimit2")
     public Result<List<Person>> queryByNameLimit2(String name) {
         return Result.success(personService.queryByNameLimit2(name));
+    }
+
+    @ApiOperation(value = "列表页面查询", notes = "")
+    @PostMapping("/queryPage")
+    public Result queryPage(ElasticReq req) {
+        try {
+            PageBean pageBean = personService.queryPage(req);
+            return Result.success(pageBean);
+        } catch (Exception e) {
+        }
+        return Result.error("");
     }
 }
