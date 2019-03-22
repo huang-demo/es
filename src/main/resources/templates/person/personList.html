@@ -134,7 +134,7 @@
                 //页码切换执行方法
                 pageFn(val) {
                     this.model.page = val;
-                    var param = {'page': val, "pageSize": 3};
+                    var param = {'page': val, "pageSize": 10};
                     param['kw'] = $("input[name='kw']").val();
                     getList(param);
                 }
