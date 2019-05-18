@@ -1,7 +1,7 @@
 package com.dem.es.task;
 
-import com.dem.es.domain.constant.ElasticConstant;
-import com.dem.es.domain.constant.RedisConstant;
+import com.dem.es.entity.constant.ElasticConstant;
+import com.dem.es.entity.constant.RedisConstant;
 import com.dem.es.service.ElasticPersonService;
 import com.dem.es.service.JedisClient;
 import com.dem.es.util.DateUtil;

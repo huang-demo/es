@@ -1,4 +1,4 @@
-package com.dem.es.domain;
+package com.dem.es.entity.po;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;

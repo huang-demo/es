@@ -1,6 +1,6 @@
 package com.dem.es.service;
 
-import com.dem.es.domain.req.ElasticReq;
+import com.dem.es.entity.req.ElasticReq;
 import com.dem.es.util.PageBean;
 
 import java.io.IOException;

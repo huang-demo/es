@@ -1,6 +1,6 @@
 package com.dem.es.web;
 
-import com.dem.es.domain.ProjectInfo;
+import com.dem.es.entity.po.ProjectInfo;
 import com.dem.es.service.ProjectInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

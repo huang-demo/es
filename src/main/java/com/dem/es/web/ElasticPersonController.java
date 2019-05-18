@@ -1,6 +1,6 @@
 package com.dem.es.web;
 
-import com.dem.es.domain.req.ElasticReq;
+import com.dem.es.entity.req.ElasticReq;
 import com.dem.es.service.ElasticPersonService;
 import com.dem.es.util.PageBean;
 import com.dem.es.util.Result;
@@ -10,7 +10,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

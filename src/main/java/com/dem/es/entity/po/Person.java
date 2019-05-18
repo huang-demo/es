@@ -1,7 +1,6 @@
-package com.dem.es.domain;
+package com.dem.es.entity.po;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,8 +9,7 @@ import java.util.Date;
 @Entity
 @Table(name = "person")
 //@JsonIgnoreProperties({ "handler","hibernateLazyInitializer" })//懒加载导致json数据对象传输异常
-@Setter
-@Getter
+@Data
 public class Person implements Serializable {
     @Id
     @GeneratedValue

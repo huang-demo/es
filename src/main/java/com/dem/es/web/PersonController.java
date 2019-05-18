@@ -1,7 +1,7 @@
 package com.dem.es.web;
 
-import com.dem.es.domain.Person;
-import com.dem.es.domain.req.ElasticReq;
+import com.dem.es.entity.po.Person;
+import com.dem.es.entity.req.ElasticReq;
 import com.dem.es.service.PersonService;
 import com.dem.es.util.PageBean;
 import com.dem.es.util.Result;
@@ -9,10 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

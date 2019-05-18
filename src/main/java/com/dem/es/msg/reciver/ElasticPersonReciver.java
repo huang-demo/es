@@ -1,7 +1,7 @@
 package com.dem.es.msg.reciver;
 
-import com.dem.es.domain.constant.ElasticConstant;
-import com.dem.es.domain.constant.ExchangeConstant;
+import com.dem.es.entity.constant.ElasticConstant;
+import com.dem.es.entity.constant.ExchangeConstant;
 import com.dem.es.msg.ElasticMsgDto;
 import com.dem.es.service.ElasticPersonService;
 import com.dem.es.util.GsonUtils;

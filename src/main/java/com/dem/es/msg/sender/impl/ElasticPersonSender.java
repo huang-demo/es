@@ -1,6 +1,6 @@
 package com.dem.es.msg.sender.impl;
 
-import com.dem.es.domain.constant.ElasticConstant;
+import com.dem.es.entity.constant.ElasticConstant;
 import com.dem.es.msg.sender.IElasticPersonSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

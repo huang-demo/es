@@ -1,7 +1,7 @@
 package com.dem.es.service.impl;
 
-import com.dem.es.domain.Person;
-import com.dem.es.domain.req.ElasticReq;
+import com.dem.es.entity.po.Person;
+import com.dem.es.entity.req.ElasticReq;
 import com.dem.es.msg.sender.IElasticPersonSender;
 import com.dem.es.repository.PersonJpaReponsitory;
 import com.dem.es.service.PersonService;

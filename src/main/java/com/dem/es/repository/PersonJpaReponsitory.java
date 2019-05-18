@@ -1,7 +1,6 @@
 package com.dem.es.repository;
 
-import com.dem.es.domain.Person;
-import org.springframework.data.domain.Page;
+import com.dem.es.entity.po.Person;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package com.dem.es.domain.req;
+package com.dem.es.entity.req;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,6 +1,6 @@
 package com.dem.es.service;
 
-import com.dem.es.domain.ProjectInfo;
+import com.dem.es.entity.po.ProjectInfo;
 import com.dem.es.util.PageBean;
 
 import java.io.IOException;

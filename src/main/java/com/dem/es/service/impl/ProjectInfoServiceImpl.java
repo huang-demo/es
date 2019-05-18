@@ -1,6 +1,6 @@
 package com.dem.es.service.impl;
 
-import com.dem.es.domain.ProjectInfo;
+import com.dem.es.entity.po.ProjectInfo;
 import com.dem.es.repository.ProjectInfoJpaResponsitory;
 import com.dem.es.service.ProjectInfoService;
 import com.dem.es.util.Constant;

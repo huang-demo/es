@@ -1,7 +1,7 @@
 package com.dem.es.msg.sender.impl;
 
-import com.dem.es.domain.constant.ExchangeConstant;
-import com.dem.es.domain.constant.MsgEvent;
+import com.dem.es.entity.constant.ExchangeConstant;
+import com.dem.es.entity.constant.MsgEvent;
 import com.dem.es.msg.ElasticMsgDto;
 import com.dem.es.msg.sender.IElasticPersonSender;
 import com.dem.es.util.GsonUtils;

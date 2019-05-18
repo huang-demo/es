@@ -1,31 +1,22 @@
 package com.dem.es.conf;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.log4j.Logger;
+import lombok.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-import java.util.HashSet;
-import java.util.Set;
-
-/**
- * 单机版配置
- */
 @Configuration
+@Data
 public class RedisConfig {
-    private static Logger logger = Logger.getLogger(RedisConfig.class);
-    @Getter
-    @Setter
+    private static Logger logger = LoggerFactory.getLogger(RedisConfig.class);
+
     @Value("${spring.redis.host}")
     private String host;
-    @Getter
-    @Setter
+
     @Value("${spring.redis.port}")
     private int port;
 
@@ -44,5 +35,4 @@ public class RedisConfig {
         logger.info("init JredisPool ...");
         return pool;
     }
-
 }

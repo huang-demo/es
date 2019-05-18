@@ -1,12 +1,11 @@
 package com.dem.es.web;
 
-import com.dem.es.domain.UserInfo;
+import com.dem.es.entity.po.UserInfo;
 import com.dem.es.service.UserInfoService;
 import com.dem.es.util.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

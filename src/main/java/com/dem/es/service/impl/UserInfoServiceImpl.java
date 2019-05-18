@@ -1,6 +1,6 @@
 package com.dem.es.service.impl;
 
-import com.dem.es.domain.UserInfo;
+import com.dem.es.entity.po.UserInfo;
 import com.dem.es.repository.UserInfoJpaRepository;
 import com.dem.es.repository.UserInfoRepository;
 import com.dem.es.service.UserInfoService;

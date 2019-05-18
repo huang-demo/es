@@ -1,4 +1,4 @@
-package com.dem.es.domain.constant;
+package com.dem.es.entity.constant;
 
 import java.io.Serializable;
 

@@ -1,7 +1,6 @@
 package com.dem.es.repository;
 
-import com.dem.es.domain.UserInfo;
-import org.springframework.data.jpa.repository.Query;
+import com.dem.es.entity.po.UserInfo;
 import org.springframework.data.repository.Repository;
 
 import java.util.List;

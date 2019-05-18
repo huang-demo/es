@@ -1,4 +1,4 @@
-package com.dem.es.domain.constant;
+package com.dem.es.entity.constant;
 
 public enum  MsgEvent {
      ADD("add"),

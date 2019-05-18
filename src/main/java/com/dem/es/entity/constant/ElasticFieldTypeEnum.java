@@ -1,4 +1,4 @@
-package com.dem.es.domain;
+package com.dem.es.entity.constant;
 
 public enum ElasticFieldTypeEnum {
     BOOLEAN,

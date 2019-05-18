@@ -1,6 +1,6 @@
 package com.dem.es.service;
 
-import com.dem.es.domain.UserInfo;
+import com.dem.es.entity.po.UserInfo;
 
 import java.util.List;
 
