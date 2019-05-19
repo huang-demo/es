@@ -21,7 +21,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public UserInfo findById(Long id) {
-        return userInfoJpaRepository.findOne(id);
+        return userInfoJpaRepository.getOne(id);
     }
 
     @Override

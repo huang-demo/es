@@ -8,7 +8,10 @@ import com.dem.es.entity.vo.ElasticMappingTypeVO;
 import com.dem.es.entity.vo.ElasticNestMappingVO;
 import com.dem.es.repository.PersonJpaReponsitory;
 import com.dem.es.service.ElasticPersonService;
-import com.dem.es.util.*;
+import com.dem.es.util.DateUtil;
+import com.dem.es.util.ObjectUtil;
+import com.dem.es.util.PageBean;
+import com.dem.es.util.StringUtil;
 import org.apache.log4j.Logger;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
@@ -23,7 +26,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class ElasticPersonServiceImpl extends ElasticBaseServiceImpl implements ElasticPersonService {
@@ -183,7 +189,7 @@ public class ElasticPersonServiceImpl extends ElasticBaseServiceImpl implements 
 
     @Override
     public void update(Long id) throws IOException {
-        Person person = personJpaReponsitory.findById(id);
+        Person person = personJpaReponsitory.getOne(id);
         if (person == null) {
             return;
         }

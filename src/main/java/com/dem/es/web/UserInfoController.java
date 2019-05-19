@@ -12,13 +12,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/userInfo")
-@Api(value = "用户模块")
+@Api(tags = "用户模块")
 public class UserInfoController {
 
     @Autowired
     private UserInfoService userInfoService;
 
-    @ApiOperation(value = "/按名称查询", notes = "")
+    @ApiOperation(value = "/按名称查询", notes = "按名称查询")
     @PostMapping("/list")
     public Result<List<UserInfo>> list(String kw) {
         List<UserInfo> list = userInfoService.findByName(kw);
@@ -28,7 +28,7 @@ public class UserInfoController {
         return Result.success(list);
     }
 
-    @ApiOperation(value = "/按用户id查询", notes = "")
+    @ApiOperation(value = "/按用户id查询", notes = "按用户id查询")
     @GetMapping("/{id}")
     public Result<UserInfo> getById(@PathVariable Long id) {
         return Result.success(userInfoService.findById(id));

@@ -8,8 +8,6 @@ public class IndexController extends BaseController{
     //首页
     @GetMapping(value="index")
     public String index() {
-        Long curUserId = getCurUserId();
-        System.out.println(curUserId);
         return "index";
     }
 }

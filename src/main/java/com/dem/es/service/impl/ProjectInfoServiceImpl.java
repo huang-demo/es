@@ -95,10 +95,11 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
 
     @Override
     public String addOne(Long projectId) throws IOException {
-        ProjectInfo projectInfo = projectInfoJpaResponsitory.findOne(projectId);
+        ProjectInfo projectInfo = projectInfoJpaResponsitory.getOne(projectId);
         if (projectInfo == null) {
             return "";
         }
+
         IndexRequestBuilder builder = transportClient.prepareIndex(Constant.ELASTIC_INDEX_PROJECT_TEST, Constant.ELASTIC_TYPES_PROJECTINFO);
         XContentBuilder contentBuilder = XContentFactory.jsonBuilder()
                 .startObject()

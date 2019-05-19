@@ -25,7 +25,7 @@ public class ElasticPersonInitDataTask {
     @Autowired
     private JedisClient jedisClient;
 
-    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0 0/1 * * ?")
     public void init() {
         logger.info("{}:elstic 增量同步index:{},type:{}", DateUtil.formatDateToString(new Date(), "yyyy-MM-dd HH:mm:ss"), ElasticConstant.INDEX_PERESON, ElasticConstant.TYPE_PERSON_PERSONINFO);
         try {
