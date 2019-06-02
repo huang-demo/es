@@ -1,18 +1,17 @@
 package com.dem.es.entity.po;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 
-@Setter
-@Getter
 @Entity
+@Data
 public class Transactions implements Serializable {
 
     /**
@@ -21,8 +20,8 @@ public class Transactions implements Serializable {
      * make : ford
      * sold : 2014-05-18
      */
-    @GeneratedValue
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     @SerializedName("price")
     private double price;

@@ -8,6 +8,7 @@
 
 package com.dem.es.util;
 
+import com.dem.es.entity.dto.LoginUserDTO;
 import com.dem.es.exception.ValidaParamExceltion;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
@@ -61,5 +62,26 @@ public class ShiroUtils{
 		}
 		getSession().removeAttribute(key);
 		return kaptcha.toString();
+	}
+
+	/**
+	 *
+	 * @return
+	 */
+	public static LoginUserDTO getCurUser(){
+		if(!isLogin()){
+			return new LoginUserDTO();
+		}
+		LoginUserDTO user = (LoginUserDTO)ShiroUtils.getSubject().getPrincipal();
+		return user;
+	}
+
+	/**
+	 *
+	 * @return
+	 */
+	public static String getCurUserName(){
+		LoginUserDTO curUser = getCurUser();
+		return curUser.getUsername();
 	}
 }

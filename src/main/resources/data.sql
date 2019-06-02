@@ -12,7 +12,7 @@ MySQL - 5.7.22-log : Database - test
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`test` /*!40100 DEFAULT CHARACTER SET latin1 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`test` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 
 USE `test`;
 
@@ -25,6 +25,9 @@ CREATE TABLE `hibernate_sequence` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 /*Data for the table `hibernate_sequence` */
+
+insert  into `hibernate_sequence`(`next_val`) values 
+(2);
 
 /*Table structure for table `person` */
 
@@ -90,6 +93,31 @@ insert  into `projectinfo`(`id`,`amount`,`content`,`createTime`,`name`,`pid`,`pr
 (12,10,'test','2017-12-06 16:20:35','test',0,1,'2017-12-07 16:20:43'),
 (13,1000,'test','2018-01-04 23:10:53','test',0,1,'2018-01-04 23:11:06'),
 (14,1000,'火车站-1','2018-01-04 23:11:30','五号线-火车东站',0,1,'2018-01-04 23:11:51');
+
+/*Table structure for table `sys_menu` */
+
+DROP TABLE IF EXISTS `sys_menu`;
+
+CREATE TABLE `sys_menu` (
+  `menu_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` bigint(20) unsigned DEFAULT '0',
+  `name` varchar(50) DEFAULT '',
+  `url` varchar(255) DEFAULT '',
+  `perms` varchar(255) DEFAULT '',
+  `type` tinyint(2) unsigned DEFAULT '0',
+  `icon` varchar(20) DEFAULT '',
+  `order_num` int(5) DEFAULT '0',
+  PRIMARY KEY (`menu_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `sys_menu` */
+
+insert  into `sys_menu`(`menu_id`,`parent_id`,`name`,`url`,`perms`,`type`,`icon`,`order_num`) values 
+(1,0,'系统管理','','',0,'fa fa-cog',0),
+(2,1,'用户管理','modules/sys/user.html','',1,'fa fa-user',0),
+(3,0,'项目管理','','',0,'fa fa-cog',0),
+(4,3,'Elastic数据','modules/elastic/project.html','',1,'fa fa-cog',0),
+(5,3,'Mysql数据','modules/sys/project.html','',1,'fa fa-cog',0);
 
 /*Table structure for table `sys_permission` */
 
@@ -170,7 +198,7 @@ CREATE TABLE `sys_user` (
 insert  into `sys_user`(`id`,`user_name`,`email`,`password`,`create_time`,`last_login_time`,`status`,`salt`) values 
 (1,'admin','admin@163.com','7B6C73B597DB0766EF1385C760925FD3','2019-05-19 17:01:02','2019-05-19 17:01:05',1,'_es'),
 (2,'Elastic',NULL,'7B6C73B597DB0766EF1385C760925FD3','2019-05-19 17:02:25','2019-05-19 17:02:30',1,'_es'),
-(3,'DB',NULL,'7B6C73B597DB0766EF1385C760925FD3','2019-05-19 17:02:44','2019-05-19 17:02:47',1,NULL);
+(3,'DB',NULL,'7B6C73B597DB0766EF1385C760925FD3','2019-05-19 17:02:44','2019-05-19 17:02:47',1,'_es');
 
 /*Table structure for table `sys_user_role` */
 

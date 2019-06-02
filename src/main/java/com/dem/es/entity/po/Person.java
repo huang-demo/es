@@ -8,11 +8,10 @@ import java.util.Date;
 
 @Entity
 @Table(name = "person")
-//@JsonIgnoreProperties({ "handler","hibernateLazyInitializer" })//懒加载导致json数据对象传输异常
 @Data
 public class Person implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String address;

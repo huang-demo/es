@@ -1,4 +1,4 @@
-package com.dem.es.util;
+package com.dem.es.entity.constant;
 
 public class Constant {
 

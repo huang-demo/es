@@ -1,7 +1,6 @@
 package com.dem.es.entity.po;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,11 +8,10 @@ import java.util.Date;
 
 @Entity
 @Table(name = "projectinfo")
-@Setter
-@Getter
+@Data
 public class ProjectInfo implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
     private Long pid;
     private String name;

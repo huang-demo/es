@@ -1,7 +1,7 @@
 package com.dem.es.service.impl;
 
 import com.dem.es.service.TransactionsService;
-import com.dem.es.util.Constant;
+import com.dem.es.entity.constant.Constant;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;

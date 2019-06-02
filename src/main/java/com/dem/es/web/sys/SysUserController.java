@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("sys/user")
 @RestController
 @Api(tags = "系统用户")
-public class SysUserController{
+public class SysUserController {
 
 
     @GetMapping("info")
     @ApiOperation(notes = "获取当前用户信息", value = "获取当前用户信息", response = LoginUserDTO.class)
-    public Result getInfo(){
-        LoginUserDTO user = (LoginUserDTO)ShiroUtils.getSubject().getPrincipal();
+    public Result getInfo() {
+        LoginUserDTO user = ShiroUtils.getCurUser();
         return Result.success(user);
     }
 }
