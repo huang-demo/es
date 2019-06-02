@@ -1,6 +1,6 @@
 package com.dem.es.shiro;
 
-import com.dem.es.entity.dto.LoginDTO;
+import com.dem.es.entity.dto.LoginUserDTO;
 import com.dem.es.entity.po.SysPermission;
 import com.dem.es.entity.po.SysRole;
 import com.dem.es.entity.po.SysUser;
@@ -9,6 +9,7 @@ import com.dem.es.service.SysPermissionService;
 import com.dem.es.service.SysRoleService;
 import com.dem.es.service.SysUserService;
 import com.dem.es.util.MD5Util;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -21,6 +22,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author admin
+ */
+@Slf4j
 public class EsShrioRealm extends AuthorizingRealm {
 
     @Autowired
@@ -43,7 +48,7 @@ public class EsShrioRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        System.out.println("权限认证方法：MyShiroRealm.doGetAuthorizationInfo()");
+        log.info("权限认证方法：MyShiroRealm.doGetAuthorizationInfo()");
         SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
         Long userId = user.getId();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
@@ -92,9 +97,9 @@ public class EsShrioRealm extends AuthorizingRealm {
             //清空登录计数
             jedisClient.set(SHIRO_LOGIN_COUNT + name, "0");
         }
-        LoginDTO userInfoDTO = new LoginDTO();
-        userInfoDTO.setUserId(user.getId());
-        userInfoDTO.setUserName(user.getUserName());
-        return new SimpleAuthenticationInfo(token.getPrincipal(), password, getName());
+        LoginUserDTO userInfoDTO = new LoginUserDTO();
+        userInfoDTO.setUserid(user.getId());
+        userInfoDTO.setUsername(user.getUserName());
+        return new SimpleAuthenticationInfo(userInfoDTO, password, getName());
     }
 }

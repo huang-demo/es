@@ -280,4 +280,8 @@ public class MD5Util {
         md5Memcpy(buffer, inbuf, index, i, inputLen - i);
     }
 
+    public static void main(String[] args){
+
+    }
+
 }

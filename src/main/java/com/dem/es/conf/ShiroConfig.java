@@ -1,112 +1,113 @@
+/**
+ * Copyright (c) 2016-2019 人人开源 All rights reserved.
+ *
+ * https://www.renren.io
+ *
+ * 版权所有，侵权必究！
+ */
+
 package com.dem.es.conf;
 
 import com.dem.es.shiro.EsShrioRealm;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
-import org.crazycake.shiro.RedisCacheManager;
-import org.crazycake.shiro.RedisManager;
-import org.crazycake.shiro.RedisSessionDAO;
+import org.apache.shiro.web.session.mgt.ServletContainerSessionManager;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Shiro的配置文件
+ *
+ * @author Mark sunlightcs@gmail.com
+ */
 @Configuration
-public class ShiroConfig {
-    @Bean
-    public EsShrioRealm getEsShrioRealm() {
-        return new EsShrioRealm();
-    }
+public class ShiroConfig{
+
+    /**
+     * 单机环境，session交给shiro管理
+     */
 
     @Bean
-    public DefaultWebSecurityManager securityManager(EsShrioRealm userRealm, DefaultWebSessionManager redisSessionManager, RedisCacheManager redisCacheManager){
+    public EsShrioRealm myShiroRealm() {
+        EsShrioRealm myShiroRealm = new EsShrioRealm();
+        return myShiroRealm;
+    }
+    @Bean
+    @ConditionalOnProperty(prefix = "renren", name = "cluster", havingValue = "false")
+    public DefaultWebSessionManager sessionManager(@Value("${renren.globalSessionTimeout:3600}") long globalSessionTimeout){
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        sessionManager.setSessionValidationSchedulerEnabled(true);
+        sessionManager.setSessionIdUrlRewritingEnabled(false);
+        sessionManager.setSessionValidationInterval(globalSessionTimeout * 1000);
+        sessionManager.setGlobalSessionTimeout(globalSessionTimeout * 1000);
+
+        return sessionManager;
+    }
+
+    /**
+     * 集群环境，session交给spring-session管理
+     */
+    @Bean
+    @ConditionalOnProperty(prefix = "renren", name = "cluster", havingValue = "true")
+    public ServletContainerSessionManager servletContainerSessionManager() {
+        return new ServletContainerSessionManager();
+    }
+
+    @Bean("securityManager")
+    public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealm(userRealm);
-        securityManager.setSessionManager(redisSessionManager);
-        securityManager.setCacheManager(redisCacheManager);
+        securityManager.setRealm(myShiroRealm());
+//        securityManager.setSessionManager(sessionManager);
+//        securityManager.setRememberMeManager(null);
+
         return securityManager;
     }
 
+
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
-        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
+        shiroFilter.setSecurityManager(securityManager);
+        shiroFilter.setLoginUrl("/login.html");
+        shiroFilter.setSuccessUrl("/index.html");
+        shiroFilter.setUnauthorizedUrl("/");
 
-        // 必须设置 SecurityManager
-        shiroFilterFactoryBean.setSecurityManager(securityManager);
+        Map<String, String> filterMap = new LinkedHashMap<>();
+        filterMap.put("/swagger/**", "anon");
+        filterMap.put("/v2/api-docs", "anon");
+        filterMap.put("/swagger-ui.html", "anon");
+        filterMap.put("/webjars/**", "anon");
+        filterMap.put("/swagger-resources/**", "anon");
 
-        // 如果不设置默认会自动寻找Web工程根目录下的"/login"页面
-        shiroFilterFactoryBean.setLoginUrl("/login");
-        // 登录成功后要跳转的链接
-        shiroFilterFactoryBean.setSuccessUrl("/index");
-        // 未授权界面;
-        shiroFilterFactoryBean.setUnauthorizedUrl("/403");
+        filterMap.put("/statics/**", "anon");
+        filterMap.put("/login.html", "anon");
+        filterMap.put("/sys/login", "anon");
+        filterMap.put("/favicon.ico", "anon");
+        filterMap.put("/captcha.jpg", "anon");
+        filterMap.put("/**", "authc");
+        shiroFilter.setFilterChainDefinitionMap(filterMap);
 
-        // 拦截器.
-        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
-        // 配置不会被拦截的链接 顺序判断
-        filterChainDefinitionMap.put("/v2/api-docs", "anon");
-        filterChainDefinitionMap.put("/webjars/**", "anon");
-        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
-        filterChainDefinitionMap.put("/static/**", "anon");
-        filterChainDefinitionMap.put("/js/**", "anon");
-        filterChainDefinitionMap.put("/ajaxLogin", "anon");
-
-        // 配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
-        filterChainDefinitionMap.put("/logout", "logout");
-
-        filterChainDefinitionMap.put("/**", "authc");
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
-        return shiroFilterFactoryBean;
+        return shiroFilter;
     }
-    /**
-     * 配置shiro redisManager
-     * 使用的是shiro-redis开源插件
-     * @return
-     */
+
+    @Bean("lifecycleBeanPostProcessor")
+    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
+
     @Bean
-    public RedisManager redisManager(RedisConfig redisConfig) {
-        RedisManager redisManager = new RedisManager();
-        redisManager.setHost(redisConfig.getHost());
-        redisManager.setPort(redisConfig.getPort());
-        redisManager.setExpire(1800);// 配置缓存过期时间
-        redisManager.setTimeout(30);
-        return redisManager;
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
+        advisor.setSecurityManager(securityManager);
+        return advisor;
     }
-    @Bean
-    public RedisSessionDAO redisSessionDAO(RedisManager redisManager) {
-        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
-        redisSessionDAO.setRedisManager(redisManager);
-        return redisSessionDAO;
-    }
-    /**
-     * shiro session的管理
-     */
-    @Bean
-    public DefaultWebSessionManager redisSessionManager(RedisSessionDAO redisSessionDAO) {
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
-        sessionManager.setSessionDAO(redisSessionDAO);
-        return sessionManager;
-    }
-    @Bean
-    public RedisCacheManager redisCacheManager(RedisManager redisManager) {
-        RedisCacheManager redisCacheManager = new RedisCacheManager();
-        redisCacheManager.setRedisManager(redisManager);
-        return redisCacheManager;
-    }
-    /**
-     * 开启aop注解支持
-     * @param securityManager
-     * @return
-     */
-    @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(org.apache.shiro.mgt.SecurityManager securityManager) {
-        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
-        return authorizationAttributeSourceAdvisor;
-    }
-
 }

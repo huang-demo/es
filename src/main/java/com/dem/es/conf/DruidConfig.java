@@ -1,6 +1,7 @@
 package com.dem.es.conf;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.dem.es.prop.DruidProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

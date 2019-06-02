@@ -8,7 +8,7 @@ import java.io.Serializable;
 @Setter
 @Getter
 public class Result<T> implements Serializable {
-    public static Integer SUCCESS = 200;
+    public static Integer SUCCESS = 0;
     public static Integer ERROR = 500;
     private Integer code;
     private String msg;
