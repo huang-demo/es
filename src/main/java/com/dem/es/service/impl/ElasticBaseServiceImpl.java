@@ -439,7 +439,7 @@ public class ElasticBaseServiceImpl implements ElasticBaseService {
 
         String[] indexNames = {ElasticConstant.INDEX_PERESON};
         String[] fields = {"name"};
-        SearchRequestBuilder searchRequestBuilder = this.getSearchRequest(req.getPage(), req.getPageSize())
+        SearchRequestBuilder searchRequestBuilder = this.getSearchRequest(req.getPage(), req.getLimit())
                 .setIndices(indexNames)
                 .setTypes(fields)
                 .setSearchType(SearchType.DFS_QUERY_THEN_FETCH);
@@ -464,7 +464,7 @@ public class ElasticBaseServiceImpl implements ElasticBaseService {
         SearchHits hits = response.getHits();
         pageResult.setTotalNum(hits.getTotalHits());
         pageResult.setCurrentPage(req.getPage());
-        pageResult.setPageSize(req.getPageSize());
+        pageResult.setPageSize(req.getLimit());
         pageResult.setItems(getPageResult(hits));
         return pageResult;
     }

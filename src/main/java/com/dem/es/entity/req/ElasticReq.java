@@ -1,10 +1,7 @@
 package com.dem.es.entity.req;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Setter
-@Getter
-public class ElasticReq extends BaseQuery {
+@Data public class ElasticReq extends BaseQuery {
     private String kw;
 }

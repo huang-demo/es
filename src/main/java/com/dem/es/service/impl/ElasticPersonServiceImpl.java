@@ -138,14 +138,14 @@ public class ElasticPersonServiceImpl extends ElasticBaseServiceImpl implements 
     @Override
     public PageBean search(ElasticReq req) {
         PageBean page = new PageBean();
-        SearchRequestBuilder request = getSearchRequest(req.getPage(), req.getPageSize());
+        SearchRequestBuilder request = getSearchRequest(req.getPage(), req.getLimit());
         request.setQuery(getQuery(req));
         addFieldsHighLight(request, "name");
         SearchResponse response = request.get();
         SearchHits responseHits = response.getHits();
         page.setTotalNum(responseHits.totalHits);
         page.setCurrentPage(req.getPage());
-        page.setPageSize(req.getPageSize());
+        page.setPageSize(req.getLimit());
         List<Map<String, Object>> item = new ArrayList<>();
         Map<String, Object> cur = null;
         for (SearchHit hit : responseHits.getHits()) {

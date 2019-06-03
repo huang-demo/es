@@ -144,7 +144,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public PageBean queryPage(ElasticReq req) {
         PageBean page = new PageBean();
-        Pageable p = new PageRequest(req.getPage()-1, req.getPageSize());
+        Pageable p = new PageRequest(req.getPage()-1, req.getLimit());
         if (StringUtil.hasLength(req.getKw())) {
             String kw = "%" + req.getKw() + "%";
             Long count = personJpaReponsitory.countByNameLike(kw);
