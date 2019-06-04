@@ -43,7 +43,7 @@ public class PersonController {
             @ApiImplicitParam(name = "id", required = true, paramType = "Long"),
             @ApiImplicitParam(name = "person", required = true, paramType = "Person")
     })
-    @PutMapping("/{id}")
+    @PostMapping("/{id}")
     public Result<Integer> update(@PathVariable Long id, Person person) {
         int totalCount = personService.update(id, person);
         return Result.success(totalCount);
@@ -100,7 +100,7 @@ public class PersonController {
         return Result.success(personService.queryByNameLimit2(name));
     }
 
-    @ApiOperation(value = "列表页面查询", notes = "")
+    @ApiOperation(value = "列表页面查询", notes = "列表页面查询")
     @PostMapping("/queryPage")
     public Result queryPage(ElasticReq req) {
         try {

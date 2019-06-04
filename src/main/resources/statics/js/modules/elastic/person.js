@@ -16,6 +16,7 @@ $(function () {
 		rowList : [10,30,50],
         rownumbers: true,
         rownumWidth: 25,
+        pagination: true,
         autowidth:true,
         multiselect: false,
         pager: "#jqGridPager",
