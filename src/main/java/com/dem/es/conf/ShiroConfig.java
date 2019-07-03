@@ -8,7 +8,7 @@
 
 package com.dem.es.conf;
 
-import com.dem.es.shiro.EsShrioRealm;
+import com.dem.es.shiro.CustomShiroRealm;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -37,8 +37,8 @@ public class ShiroConfig{
      */
 
     @Bean
-    public EsShrioRealm myShiroRealm() {
-        EsShrioRealm myShiroRealm = new EsShrioRealm();
+    public CustomShiroRealm myShiroRealm() {
+        CustomShiroRealm myShiroRealm = new CustomShiroRealm();
         return myShiroRealm;
     }
     @Bean

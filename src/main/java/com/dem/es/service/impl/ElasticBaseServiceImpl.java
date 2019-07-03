@@ -8,16 +8,16 @@ import com.dem.es.entity.vo.ElasticMappingTypeVO;
 import com.dem.es.entity.vo.ElasticNestMappingVO;
 import com.dem.es.service.ElasticBaseService;
 import com.dem.es.service.JedisClient;
-import com.dem.es.util.*;
+import com.dem.es.util.DateUtil;
+import com.dem.es.util.PageBean;
+import com.dem.es.util.StringUtil;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequestBuilder;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
-import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
 import org.elasticsearch.action.admin.indices.exists.types.TypesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.types.TypesExistsResponse;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
-import org.elasticsearch.action.admin.indices.mapping.put.PutMappingResponse;
 import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -27,6 +27,7 @@ import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.Requests;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.text.Text;
@@ -68,9 +69,8 @@ public class ElasticBaseServiceImpl implements ElasticBaseService {
         if (!isExistsIndex(indexName)) {
             return true;
         }
-        DeleteIndexResponse dResponse = transportClient.admin().indices().prepareDelete(indexName)
-                .execute().actionGet();
-        return dResponse.isAcknowledged();
+        AcknowledgedResponse response = transportClient.admin().indices().prepareDelete(indexName).execute().actionGet();
+        return response.isAcknowledged();
     }
 
 
@@ -116,7 +116,7 @@ public class ElasticBaseServiceImpl implements ElasticBaseService {
             mapping.endObject()
                     .endObject();
             PutMappingRequest request = Requests.putMappingRequest(indexName).type(typeName).source(mapping);
-            PutMappingResponse response = transportClient.admin().indices().putMapping(request).actionGet();
+            AcknowledgedResponse response = transportClient.admin().indices().putMapping(request).actionGet();
             return response.isAcknowledged();
         } catch (IOException e) {
             e.printStackTrace();

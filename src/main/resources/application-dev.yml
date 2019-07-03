@@ -1,0 +1,73 @@
+spring:
+  data:
+    elasticsearch:
+      cluster-name: DEM
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.131.102:3306/test?useSSL=false&serverTimezone=UTC
+    username: root
+    password: admin
+    poolPingConnectionsNotUsedFor: 60000
+    removeAbandoned: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    minIdle: 1
+    validationQuery: SELECT 1 FROM DUAL
+    initialSize: 5
+    maxWait: 60000
+    poolPreparedStatements: false
+    filters: stat,wall
+    testOnBorrow: false
+    testWhileIdle: true
+    minEvictableIdleTimeMillis: 300000
+    timeBetweenEvictionRunsMillis: 60000
+    testOnReturn: false
+    maxActive: 50
+    druid:
+      user: admin
+      password: admin
+  freemarker:
+    suffix: .html
+    request-context-attribute: request
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  elasticsearch:
+    jest:
+      username: elastic
+      password: 111111
+      uris: 192.168.131.105:9300,192.168.131.105:9301
+  rabbitmq:
+    host: 192.168.131.102
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: dev
+    publisher-confirms: true
+    publisher-returns: true
+    listener:
+      direct:
+        acknowledge-mode=manual:
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+  type-aliases-package: com.dem.es.entity.po
+elastic:
+  isdev: true
+  person:
+   shardNum: 3
+   replicaNum: 0
+logging:
+  level:
+   com.dem.es.mapper: debug
+   org.springframework.data: DEBUG
+renren:
+  cluster: false  #集群配置  true集群环境   false单机环境，还需打开pom.xml里的spring-session-data-redis注释
+  globalSessionTimeout: 3600   #单机环境，session过期时间为60分钟

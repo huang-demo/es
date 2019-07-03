@@ -8,11 +8,14 @@ import org.elasticsearch.xpack.client.PreBuiltXPackTransportClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.PostConstruct;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 /**
  * elatisearch 配置
  */
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 @Configuration
 public class ElasticClientConfig {
@@ -28,6 +31,10 @@ public class ElasticClientConfig {
     @Value("${spring.elasticsearch.jest.password}")
     private String xpackPass;
 
+    @PostConstruct
+    void init() {
+        System.setProperty("es.set.netty.runtime.available.processors", "false");
+    }
     @Bean
     public TransportClient client() throws UnknownHostException {
         TransportClient client = null;

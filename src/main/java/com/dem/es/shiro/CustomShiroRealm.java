@@ -26,7 +26,7 @@ import java.util.Set;
  * @author admin
  */
 @Slf4j
-public class EsShrioRealm extends AuthorizingRealm {
+public class CustomShiroRealm extends AuthorizingRealm {
 
     @Autowired
     private SysUserService sysUserService;
@@ -41,10 +41,10 @@ public class EsShrioRealm extends AuthorizingRealm {
     private SysRoleService sysRoleService;
 
     //用户登录次数计数  redisKey 前缀
-    private String SHIRO_LOGIN_COUNT = "shiro_login_count_";
+    private String SHIRO_LOGIN_COUNT = "es:shiro_login_count:";
 
     //用户登录是否被锁定    一小时 redisKey 前缀
-    private String SHIRO_IS_LOCK = "shiro_is_lock_";
+    private String SHIRO_IS_LOCK = "es:shiro_is_lock:";
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
